@@ -17,11 +17,10 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+
+    protected $primaryKey = 'user_id';
+
+    protected $guarded = ['user_id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,4 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function aucations(){
+        return $this->hasMany(Aucation::class, 'user_id');
+    }
+
+    public function histories(){
+        return $this->hasMany(AucationHistory::class, 'user_id');
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Officer;
+use App\Models\Aucation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,6 +15,9 @@ class OfficersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+ 
+
     public function index()
     {
         $data['page_title'] = "List Pegawai";
@@ -64,7 +69,7 @@ class OfficersController extends Controller
             "level_id"     => 2
         ]);
 
-        return redirect()->route('listPegawai')->with('message', "Berhasil menambahkan data pegawai");
+        return redirect()->route('listPegawai')->with('success', "Berhasil menambahkan data pegawai");
     }
 
     /**
@@ -78,6 +83,10 @@ class OfficersController extends Controller
         $data['officer'] = $officer;
         $data['title']   = "Petugas";
         $data['page_title'] = 'Profil Petugas';
+        $data['officer_history'] = [
+            "create_item" => Item::where('officer_id', $officer->officer_id)->get(),
+            "create_aucation" => Aucation::where('officer_id', $officer->officer_id)->get()
+        ];
         // dd($data['officer']);
         return view('Admin.Profile', $data);
     }
@@ -153,7 +162,7 @@ class OfficersController extends Controller
             "password" => Hash::make($request->password)
         ]);
 
-        return back()->with('message', "Password petugas berhasil diubah");
+        return back()->with('success', "Password petugas berhasil diubah");
     }
 
     /**
@@ -166,6 +175,7 @@ class OfficersController extends Controller
     {
         $officer->delete();
 
-        return back()->with('message', "Berhasil menghapus data");
+        return back()->with('success', "Berhasil menghapus data");
     }
+
 }

@@ -41,7 +41,7 @@
                                 <div class="">
                                     <a href="{{ route('hapusPegawai', $officer->officer_id) }}" class="btn btn-danger" style="font-weight:bold; width:100px">Hapus</a>
                                     <a href="{{ route('editPegawai', $officer->officer_id) }}" class="btn btn-warning" style="font-weight:bold; width:100px">Ubah</a>
-                                    <a href="{{ route('detailPegawai', $officer->officer_id) }}" class="btn btn-primary" style="font-weight:bold; width:100px">Detail</a>
+                                    <a href="{{ route('profilPegawai', $officer->officer_id) }}" class="btn btn-primary" style="font-weight:bold; width:100px">Detail</a>
                                 </div>
                             </td>
                         </tr>
@@ -73,6 +73,12 @@
 <script src="{{ asset('/plugins/pdfmake/vfs_fonts.js') }}"></script>
 <script src="{{ asset('/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+@if (Session::has('success'))
+    <script>toastr.success('{{ session('success') }}')</script>
+@endif
+@if (Session::has('error'))
+    <script>toastr.error('{{ session('error') }}')</script>
+@endif
 <!-- page script -->
 <script>
     $(function () {

@@ -27,22 +27,26 @@
                             <th>Gambar barang</th>
                             <th>Nama barang</th>
                             <th>Deskripsi</th>
-                            <th>Harga awal</th>
                             <th>Kategori</th>
+                            @if (Auth()->guard()->user()->level_id == 1)
+                            <th>Dibuat oleh</th>
+                            @endif
                             <th>Aksi    </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($items as $item)
                         <tr>
-                            <td>1</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td class="text-center"><img src="{{ asset($item->item_main_image) }}" style="max-width: 300px; max-height:300px" alt=""></td>
                             <td>
                                 {{ $item->item_name }}
                             </td>
                             <td >{!! substr($item->description, 0, 100) !!}...</td>
-                            <td>Rp {{ number_format($item->initial_price, 0, ". ", ". ") }}</td>
-                            <td>X</td>
+                            <td>{{ $item->category->category }}</td>
+                            @if (Auth()->guard('officer')->user()->level_id == 1)
+                            <td><a href="{{ route('profilPegawai', $item->officer_id) }}">{{ $item->officer->officer_name }}</a></td>
+                            @endif
                             <td>
                                 <a href="{{ route('hapusBarang', $item->item_id) }}" class="btn btn-danger" style="font-weight:bold; width:100px">Hapus</a>
                                 <br>
@@ -55,13 +59,6 @@
                         </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="4">Total harga</th>
-                            <th >Rp 100. 000</th>
-                            <th colspan="2">Dari 1 barang</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             <!-- /.card-body -->
@@ -83,6 +80,13 @@
 <script src="{{ asset('/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <!-- page script -->
+@if (Session::has('success'))
+    <script>toastr.success('{{ session('success') }}')</script>
+@endif
+@if (Session::has('error'))
+    <script>toastr.error('{{ session('error') }}')</script>
+@endif
+
 <script>
     $(function () {
         $("#example1").DataTable({

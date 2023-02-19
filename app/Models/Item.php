@@ -23,4 +23,12 @@ class Item extends Model
     public function category(){
         return $this->belongsTo(ItemCategory::class, 'category_id');
     }
+
+    public function aucations(){
+        return $this->hasMany(Aucation::class, 'item_id');
+    }
+
+    public function itemDetail(){
+        return $this->hasOne(ItemDetail::class, 'item_id');
+    }
 }

@@ -31,7 +31,7 @@
                     <tbody>
                         @foreach ($categories as $category)
                         <tr>
-                            <td>1</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $category->category }}</td>
                             <td>
                                 <div class="">
@@ -67,6 +67,12 @@
 <script src="{{ asset('/plugins/pdfmake/vfs_fonts.js') }}"></script>
 <script src="{{ asset('/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+@if (Session::has('success'))
+    <script>toastr.success('{{ session('success') }}')</script>
+@endif
+@if (Session::has('error'))
+    <script>toastr.error('{{ session('error') }}')</script>
+@endif
 <!-- page script -->
 <script>
     $(function () {

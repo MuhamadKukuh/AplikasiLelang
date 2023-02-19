@@ -10,4 +10,5 @@
   <link rel="stylesheet" href="{{ asset('/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('/plugins/toastr/toastr.min.css') }}">
 @stack('parents-css')

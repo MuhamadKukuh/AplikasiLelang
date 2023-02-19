@@ -7,15 +7,15 @@
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
                 <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle" src="{{ asset('/dist/img/user8-128x128.jpg') }}"
+                    <img class="profile-user-img img-fluid img-circle" src="{{ asset('/dist/img/user2-160x160.jpg') }}"
                         alt="User profile picture">
                 </div>
 
                 <h3 class="profile-username text-center">{{ $officer->username }}</h3>
 
-                <p class="text-muted text-center">Petugas</p>
-
-                <a href="{{ route('hapusPegawai', $officer->officer_id) }}" class="btn btn-danger btn-block"><b>Hapus</b></a>
+                <p class="text-muted text-center">{{ $officer->level_id == 1 ? "Admin" : "Petugas" }}</p>
+                
+                {{-- <a href="{{ route('hapusPegawai', $officer->officer_id) }}" class="btn btn-danger btn-block"><b>Hapus</b></a> --}}
             </div>
             <!-- /.card-body -->
         </div>
@@ -33,6 +33,16 @@
                 <p class="text-muted">
                    {{ $officer->officer_name }}
                 </p>
+                <strong><i class="fas fa-boxes mr-1"></i> Barang yang di buat petugas</strong>
+
+                <p class="text-muted">
+                   {{ $officer_history['create_item']->count() }} Barang
+                </p>
+                <strong><i class="fas fa-history mr-1"></i> Riwayat menjadi petugas lelang</strong>
+
+                <p class="text-muted">
+                   {{ $officer_history['create_aucation']->count() }} Lelang
+                </p>
 
             </div>
             <!-- /.card-body -->
@@ -45,7 +55,9 @@
             <div class="card-header p-2">
                 <ul class="nav nav-pills">
                     <li class="nav-item"><a class="nav-link {{ count($errors) <= 0 ? 'active' : '' }}" href="#timeline" data-toggle="tab">Riwayat</a></li>
-                    <li class="nav-item"><a class="nav-link {{ count($errors) > 0 ? 'active' : '' }}" href="#settings" data-toggle="tab">Pengaturan</a></li>
+                    @if (Auth()->guard('officer')->user()->officer_id == $officer->officer_id || Auth()->guard('officer')->user()->level_id == 1)
+                        <li class="nav-item"><a class="nav-link {{ count($errors) > 0 ? 'active' : '' }}" href="#settings" data-toggle="tab">Pengaturan</a></li>
+                    @endif
                 </ul>
             </div><!-- /.card-header -->
             <div class="card-body">
@@ -56,89 +68,39 @@
                             <!-- timeline time label -->
                             <div class="time-label">
                                 <span class="bg-danger">
-                                    10 Feb. 2014
+                                    Barang
                                 </span>
                             </div>
                             <!-- /.timeline-label -->
                             <!-- timeline item -->
+                            @foreach ($officer_history['create_item'] as $itemHistory)
                             <div>
-                                <i class="fas fa-envelope bg-primary"></i>
-
+                                <i class="fas fa-boxes bg-info"></i>
                                 <div class="timeline-item">
-                                    <span class="time"><i class="far fa-clock"></i> 12:05</span>
+                                    <span class="time"><i class="far fa-clock"></i> {{ $itemHistory->created_at->diffForHumans() }}</span>
 
-                                    <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                                    <div class="timeline-body">
-                                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                        quora plaxo ideeli hulu weebly balihoo...
-                                    </div>
-                                    <div class="timeline-footer">
-                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                    </div>
+                                    <h3 class="timeline-header">Menambahkan barang <a href="#">{{ $itemHistory->item_name }}</a></h3>
                                 </div>
                             </div>
-                            <!-- END timeline item -->
-                            <!-- timeline item -->
-                            <div>
-                                <i class="fas fa-user bg-info"></i>
-
-                                <div class="timeline-item">
-                                    <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-
-                                    <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your
-                                        friend request
-                                    </h3>
-                                </div>
-                            </div>
-                            <!-- END timeline item -->
-                            <!-- timeline item -->
-                            <div>
-                                <i class="fas fa-comments bg-warning"></i>
-
-                                <div class="timeline-item">
-                                    <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-
-                                    <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                                    <div class="timeline-body">
-                                        Take me to your leader!
-                                        Switzerland is small and neutral!
-                                        We are more like Germany, ambitious and misunderstood!
-                                    </div>
-                                    <div class="timeline-footer">
-                                        <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END timeline item -->
-                            <!-- timeline time label -->
+                            @endforeach
                             <div class="time-label">
                                 <span class="bg-success">
-                                    3 Jan. 2014
+                                    Lelang
                                 </span>
                             </div>
                             <!-- /.timeline-label -->
                             <!-- timeline item -->
+                            @foreach ($officer_history['create_aucation'] as $aucation)
                             <div>
-                                <i class="fas fa-camera bg-purple"></i>
+                                <i class="fas fa-flag bg-purple"></i>
 
                                 <div class="timeline-item">
-                                    <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+                                    <span class="time"><i class="far fa-clock"></i> {{ $aucation->created_at != $aucation->updated_at ? $aucation->updated_at->diffForHumans() : $aucation->created_at->diffForHumans() }}</span>
 
-                                    <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                                    <div class="timeline-body">
-                                        <img src="https://placehold.it/150x100" alt="...">
-                                        <img src="https://placehold.it/150x100" alt="...">
-                                        <img src="https://placehold.it/150x100" alt="...">
-                                        <img src="https://placehold.it/150x100" alt="...">
-                                    </div>
+                                    <h3 class="timeline-header">{{ $aucation->created_at != $aucation->updated_at ? "Mengubah data lelang barang" : "Menambahkan data lelang barang" }} <a href="">{{ $aucation->item->item_name }}</a> </h3>
                                 </div>
                             </div>
+                            @endforeach
                             <!-- END timeline item -->
                             <div>
                                 <i class="far fa-clock bg-gray"></i>

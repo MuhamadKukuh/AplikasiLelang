@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use App\Models\Aucation;
+use App\Models\AucationHistory;
+use App\Models\Officer;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -15,6 +20,14 @@ class DashboardController extends Controller
     {
         $data['page_title'] = "Dashboard";
         $data['title'] = "Dashboard";
+        $data['latest_items'] = Item::whereDate('created_at', date('Y-m-d'))->get();
+        $data['latest_aucations'] = Aucation::whereDate('created_at', date('Y-m-d'))->get();
+        $data['items_total'] = Item::get()->count(); 
+        $data['aucationsHistory_total'] = AucationHistory::get()->count(); 
+        $data['officers_total'] = Officer::where('level_id', 2)->get()->count(); 
+        $data['users_total'] = User::get()->count(); 
+        $data['latest_users'] = User::whereDate('created_at', date('Y-m-d'))->get();
+
 
         return view('Admin.Index', $data);
     }

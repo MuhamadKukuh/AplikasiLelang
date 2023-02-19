@@ -29,39 +29,109 @@
             @csrf
             <div class="card card-outline card-info">
                 <!-- /.card-header -->
+                <div class="card-header">
+                    <h3 class="card-title">Data barang</h3>
+                </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Nama barang <span class="text-danger">*</span></label>
-                        <input type="text" name="item_name"
-                            value="{{ isset($item) ? $item->item_name : old('item_name') }}"
-                            class="@error('item_name') is-invalid @enderror form-control" id="exampleInputEmail1"
-                            placeholder="Masukan nama barang">
-                        @error('item_name')
-                        <span class="invalid-feedback error">{{ $message }}</span>
-                        @enderror
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Nama barang <span class="text-danger">*</span></label>
+                                <input type="text" name="item_name"
+                                    value="{{ isset($item) ? $item->item_name : old('item_name') }}"
+                                    class="@error('item_name') is-invalid @enderror form-control" id="exampleInputEmail1"
+                                    placeholder="Masukan nama barang">
+                                @error('item_name')
+                                <span class="invalid-feedback error">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <label for="exampleInputEmail1">Merek<span class="text-danger"> *</span></label>
+                            <select name="brand" class="form-control @error('brand') is-invalid @enderror" id="">
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->brand_id }}" {{ isset($item) && $item->itemDetail->brand_id == $brand->brand_id || old('brand') == $brand->brand_id ? 'selected' : '' }}>{{ $brand->brand_name }}</option>
+                                @endforeach
+                            </select>
+                            @error('brand')
+                            <span class="invalid-feedback error">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Harga awal <span class="text-danger">*</span></label>
-                        <input type="number" name="initial_price"
-                            value="{{ isset($item) ? $item->initial_price : old('initial_price') }}"
-                            class="form-control @error('initial_price') is-invalid @enderror" id="exampleInputEmail1"
-                            placeholder="Masukan harga awal">
-                        @error('initial_price')
-                        <span class="invalid-feedback error">{{ $message }}</span>
-                        @enderror
+                    <div class="row">
+                        <div class="col-12 col-sm-4">
+                            <label for="exampleInputEmail1">Kondisi barang<span class="text-danger"> *</span></label>
+                            <select name="condition" class="form-control" id="">
+                                <option value="new" {{ isset($item) && $item->itemDetail->condition == "new" ? "selected" : '' }}>Baru</option>
+                                <option value="used" {{ isset($item) && $item->itemDetail->condition == "used" ? "selected" : '' }}>Bekas</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-8">
+                            <label for="exampleInputEmail1">Kapasitas penyimpanan<span class="text-danger"> *</span></label>
+                            <input type="text" name="storage"
+                                value="{{ isset($item) ? $item->itemDetail->storage : old('storage') }}"
+                                class="@error('storage') is-invalid @enderror form-control" id="exampleInputEmail1"
+                                placeholder="Masukan kapasitas penyimpanan">
+                            @error('storage')
+                            <span class="invalid-feedback error">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Kategori barang <span class="text-danger">*</span></label>
-                        <select class="form-control select2 select2-danger" name="category"
-                            data-dropdown-css-class="select2-danger" style="width:100%">
-                            <option selected="selected">Alabama</option>
-                            <option>Alaska</option>
-                            <option>California</option>
-                            <option>Delaware</option>
-                            <option>Tennessee</option>
-                            <option>Texas</option>
-                            <option>Washington</option>
-                        </select>
+                    <div class="row mt-3">
+                        <div class="col-12 col-sm-5">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Resolusi Kamera<span class="text-danger"> *</span></label>
+                                <input type="text" name="camera"
+                                    value="{{ isset($item) ? $item->itemDetail->camera : old('camera') }}"
+                                    class="@error('camera') is-invalid @enderror form-control" id="exampleInputEmail1"
+                                    placeholder="Masukan resolusi kamera">
+                                @error('camera')
+                                <span class="invalid-feedback error">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <label for="exampleInputEmail1">Layar<span class="text-danger"> *</span></label>
+                            <input type="text" name="display"
+                                value="{{ isset($item) ? $item->itemDetail->display : old('display') }}"
+                                class="@error('display') is-invalid @enderror form-control" id="exampleInputEmail1"
+                                placeholder="Masukan keterangan layar">
+                            @error('display')
+                            <span class="invalid-feedback error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-12 col-sm-3">
+                            <label for="exampleInputEmail1">Kapasitas Batrai<span class="text-danger"> *</span></label>
+                            <input type="number" name="battery"
+                                value="{{ isset($item) ? $item->itemDetail->battery : old('battery') }}"
+                                class="@error('battery') is-invalid @enderror form-control" id="exampleInputEmail1"
+                                placeholder="Masukan kapasitas batrai">
+                            @error('battery')
+                            <span class="invalid-feedback error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                                <label>Kategori barang <span class="text-danger">*</span></label>
+                                <select class="form-control" name="category">
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->category_id }}">{{ $category->category }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-8">
+                            <label for="exampleInputEmail1">Chipset<span class="text-danger"> *</span></label>
+                            <input type="text" name="chipset"
+                                value="{{ isset($item) ? $item->itemDetail->chipset : old('chipset') }}"
+                                class="@error('chipset') is-invalid @enderror form-control" id="exampleInputEmail1"
+                                placeholder="Masukan spesifiksi chipset">
+                            @error('chipset')
+                            <span class="invalid-feedback error">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputFile">Gambar Utama Barang <span class="text-danger">*</span></label>
@@ -149,6 +219,13 @@
 <!-- Select2 -->
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- Page specific script -->
+@if (Session::has('error'))
+<script>
+    toastr.error('{{ session('error') }}')
+</script>
+@endif
+
+
 <script>
     $(function () {
 

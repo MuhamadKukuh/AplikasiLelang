@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Model;
+// use Illuminate\Database\Eloquent\Model;
 
 class Officer extends Model
 {
@@ -13,7 +14,7 @@ class Officer extends Model
     protected $guarded    = ['officer_id'];
 
     public function aucations(){
-
+        return $this->hasMany(Officer::class, 'officer_id');
     }
 
     public function items(){

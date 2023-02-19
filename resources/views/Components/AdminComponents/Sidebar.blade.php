@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="index3.html" class="brand-link">
+  <a href="{{ route('Dashboard') }}" class="brand-link">
     <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">AdminLTE 3</span>
   </a>
@@ -10,10 +10,10 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+        <img src="{{ asset('/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">Alexander Pierce</a>
+        <a href="{{ route('profilPegawai', Auth()->guard('officer')->user()->officer_id ) }}" class="d-block">{{ Auth()->guard('officer')->user()->officer_name }}</a>
       </div>
     </div>
 
@@ -52,6 +52,35 @@
           </ul>
         </li>
         <li class="nav-item menu-open">
+          <a href="#" class="nav-link {{ $title == "Lelang" ? 'active' : '' }}">
+            <i class="nav-icon fas fa-flag"></i>
+            <p>
+              Lelang
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('listLelang') }}" class="nav-link {{ $page_title == "List Lelang" ? 'active' : '' }}">
+                <i class="fas fa-table nav-icon"></i>
+                <p>List Lelang</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('tambahLelang') }}" class="nav-link {{ $page_title == "Tambah Lelang" ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Tambah Lelang</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('riwayatLelang') }}" class="nav-link {{ $page_title == "Riwayat Lelang" ? 'active' : '' }}">
+                <i class="fas fa-history nav-icon"></i>
+                <p>Riwayat Lelang</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item menu-open">
           <a href="#" class="nav-link {{ $title == "Barang" ? 'active' : '' }}">
             <i class="nav-icon fas fa-boxes"></i>
             <p>
@@ -74,6 +103,7 @@
             </li>
           </ul>
         </li>
+        @if (Auth()->guard('officer')->user()->level->level == "Administrator")
         <li class="nav-item menu-open">
           <a href="#" class="nav-link {{ $title == "Pegawai" ? 'active' : '' }}">
             <i class="nav-icon fas fa-users"></i>
@@ -97,6 +127,7 @@
             </li>
           </ul>
         </li>
+        @endif
         <li class="nav-item menu-open">
           <a href="#" class="nav-link {{ $title == "Kategori" ? 'active' : '' }}">
             <i class="nav-icon fas fa-box"></i>
@@ -120,14 +151,28 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a href="pages/widgets.html" class="nav-link ">
-            <i class="nav-icon fas fa-history"></i>
+        <li class="nav-item menu-open">
+          <a href="#" class="nav-link {{ $title == "Merek" ? 'active' : '' }}">
+            <i class="nav-icon fas fa-box"></i>
             <p>
-              Riwayat Lelang
-              <span class="right badge badge-danger">New</span>
+              Merek
+              <i class="right fas fa-angle-left"></i>
             </p>
           </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('listMerek') }}" class="nav-link {{ $page_title == "List Merek" ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>List Merek</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('tambahMerek') }}" class="nav-link {{ $page_title == "Tambah Merek" ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Tambah Merek</p>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="nav-item">
           <a href="pages/widgets.html" class="nav-link ">
@@ -135,6 +180,14 @@
             <p>
               Pesan
               <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('adminLogout') }}" class="nav-link ">
+            <i class="nav-icon fas"></i>
+            <p>
+              Logout
             </p>
           </a>
         </li>

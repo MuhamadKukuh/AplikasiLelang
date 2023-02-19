@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('item_main_image');
             $table->string('item_name');
             $table->text('description');
-            $table->string('initial_price');
             $table->foreignId('officer_id');
             $table->foreignId('category_id');
             $table->timestamps();

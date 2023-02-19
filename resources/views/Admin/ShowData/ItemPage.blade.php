@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12 col-sm-6" style="margin-bottom: 20px">
-                <h3 class="d-inline-block d-sm-none text-uppercase">{{ $item->item_name }} <p><span  class="btn btn-sm btn-info rounded" >Barang Elektronik</span></p></h3>
+                <h3 class="d-inline-block d-sm-none text-uppercase">{{ $item->item_name }} <p><span  class="btn btn-sm btn-info rounded" >{{ $item->category->category }}</span></p></h3>
                 <div class="col-12">
                     <img src="{{ asset($item->item_main_image) }}" class="product-image" alt="Product Image">
                 </div>
@@ -19,57 +19,104 @@
                 </div>
             </div>
             <div class=" col-12 col-sm-6 "> 
-                <h3 class="d-none d-md-block my-3 text-uppercase">{{ $item->item_name }} </h3>
-                <p class="d-none d-md-block"><span  class="btn btn-sm btn-info rounded text-capitalized" >Barang Elektronik</span></p>
+                <h3 class="d-none d-md-block text-uppercase">{{ $item->item_name }} </h3>
+                <span  class="badge badge-info rounded text-capitalized" >{{ $item->category->category }}</span>
+                <hr>
+                <div class="row mt-4">
+                    @if (isset($aucation))
+                    <div class="col-6">
+                        <div class="wrap">
+                            <h6>Tanggal lelang</h6>
+                            <h4>{{ $aucation->aucation_date }}</h4>
+                        </div>
+                        <div class="wrap">
+                            <h6>Status</h6>
+                            <h4>{{ $aucation->status == "opened" ? "Buka" : "Tutup" }}</h4>
+                        </div>
+                        <div class="wrap">
+                            <h6>Harga dasar</h6>
+                            <h4>{{ number_format($aucation->initial_price, 0, "", ". ") }}</h4>
+                        </div>
+                        <div class="wrap">
+                            <h6>Kelipatan bid</h6>
+                            <h4>{{ number_format($aucation->multiple_bid, 0, "", ". ") }}</h4>
+                        </div>
+                        <div class="wrap">
+                            <h6>Harga Akhir</h6>
+                            <h4>{{ $aucation->user_id == null ? "Belum ada yang melakukan bid" : number_format($aucation->final_price, 0, "", ". "). "oleh" . $aucation->user->name  }}</h4>
+                        </div>
+                        <div class="wrap">
+                            <h6>Petugas lelang di buka</h6>
+                            <h4>{{ $aucation->officer->officer_name }}</h4>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="wrap">
+                            <h6>Chipset</h6>
+                            <h4>{{ $item->itemDetail->chipset }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>Layar</h6>
+                            <h4>{{ $item->itemDetail->display }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>Penyimpanan</h6>
+                            <h4>{{ $item->itemDetail->storage }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>Kamera</h6>
+                            <h4>{{ $item->itemDetail->camera }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>Batrai</h6>
+                            <h4>{{ $item->itemDetail->battery }} <small>mAh</small> </h4>
+                        </div>
+                        <hr>
+                    </div>
+                    @else
+                    <div class="col-12">
+                        <div class="wrap">
+                            <h6>CHIPSET</h6>
+                            <h4>{{ $item->itemDetail->chipset }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>LAYAR</h6>
+                            <h4>{{ $item->itemDetail->display }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>Penyimpanan</h6>
+                            <h4>{{ $item->itemDetail->storage }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>Kamera</h6>
+                            <h4>{{ $item->itemDetail->camera }}</h4>
+                        </div>
+                        <hr>
+                        <div class="wrap">
+                            <h6>Batrai</h6>
+                            <h4>{{ $item->itemDetail->battery }} <small>mAh</small> </h4>
+                        </div>
+                        <hr>
+                    </div>
+                    @endif
+                </div>
+                @if (isset($aucation))
+
+                    <a href="{{ route('updateStatus', $aucation->aucation_id) }}" class="btn btn-warning my-4">{{ $aucation->status == "closed" ? "Buka " : "Tutup " }} Lelang</a>
+                @endif
+                <h6 class="mt-2">Deskripsi :</h6>
                 <p>
-                    {!! $item->description !!} Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero magnam ipsa quasi quidem ad eos suscipit fugiat hic minima laboriosam omnis accusantium nihil quis neque natus, doloribus quaerat modi? Quas! Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta aliquam suscipit ex! Tempore quod ipsum accusantium, tenetur voluptate non eveniet.
+                    {!! $item->description !!} 
                 </p>
 
-                <hr>
-                {{-- <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-default text-center active">
-                        <input type="radio" name="color_option" id="color_option_a1" autocomplete="off" checked>
-                        Green
-                        <br>
-                        <i class="fas fa-circle fa-2x text-green"></i>
-                    </label>
-                    <label class="btn btn-default text-center">
-                        <input type="radio" name="color_option" id="color_option_a2" autocomplete="off">
-                        Blue
-                        <br>
-                        <i class="fas fa-circle fa-2x text-blue"></i>
-                    </label>
-                    <label class="btn btn-default text-center">
-                        <input type="radio" name="color_option" id="color_option_a3" autocomplete="off">
-                        Purple
-                        <br>
-                        <i class="fas fa-circle fa-2x text-purple"></i>
-                    </label>
-                    <label class="btn btn-default text-center">
-                        <input type="radio" name="color_option" id="color_option_a4" autocomplete="off">
-                        Red
-                        <br>
-                        <i class="fas fa-circle fa-2x text-red"></i>
-                    </label>
-                    <label class="btn btn-default text-center">
-                        <input type="radio" name="color_option" id="color_option_a5" autocomplete="off">
-                        Orange
-                        <br>
-                        <i class="fas fa-circle fa-2x text-orange"></i>
-                    </label>
-                </div> --}}
-                <div class="bg-gray py-2 px-3 mt-4">
-                    <h2 class="mb-0">
-                        Rp {{ number_format($item->initial_price, 0, '.', '. ') }}
-                    </h2>
-                </div>
-
-                <div class="mt-4">
-                    <div class="btn btn-primary btn-lg btn-flat" style="width:200px">
-                        <i class="fas fa-flag fa-lg mr-2"></i>
-                        Buka Lelang
-                    </div>
-                </div>
+                <hr>    
 
                 
             </div>
@@ -79,6 +126,13 @@
 </div>
 
 @push('parents-js')
+@if (Session::has('success'))
+    <script>toastr.success('{{ session('success') }}')</script>
+@endif
+@if (Session::has('error'))
+    <script>toastr.error('{{ session('error') }}')</script>
+@endif
+
 <script>
     $(document).ready(function () {
         $('.product-image-thumb').on('click', function () {

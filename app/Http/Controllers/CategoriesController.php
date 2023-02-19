@@ -50,7 +50,7 @@ class CategoriesController extends Controller
             "category" => $request->category
         ]);
 
-        return redirect()->route('listKategori')->with("message", "Kategori berhasil ditambahkan");
+        return redirect()->route('listKategori')->with("success", "Kategori berhasil ditambahkan");
 
     }
 
@@ -99,7 +99,7 @@ class CategoriesController extends Controller
             ]);
         }
 
-        return redirect()->route('listKategori')->with('message', "Data kategori berhasil diubah");
+        return redirect()->route('listKategori')->with('success', "Data kategori berhasil diubah");
     }
 
     /**
