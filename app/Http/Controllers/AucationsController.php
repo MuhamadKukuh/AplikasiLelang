@@ -17,7 +17,11 @@ class AucationsController extends Controller
      */
     public function index()
     {
-        $data['aucations'] = Aucation::all();
+        if(Auth()->guard('officer')->user()->level_id == 1){
+            $data['aucations'] = Aucation::all();
+        }else{
+            $data['aucations'] = Aucation::where('officer_id', Auth()->guard('officer')->user()->officer_id)->get();
+        }
         $data['title']     = "Lelang";
         $data['page_title']= 'List Lelang';
 

@@ -127,6 +127,29 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item menu-open">
+          <a href="#" class="nav-link {{ $title == "Masyarakat" ? 'active' : '' }}">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Masyarakat
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('listMasyarakat') }}" class="nav-link {{ $page_title == "List Masyarakat" ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>List Masyarakat</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('tambahMasyarakat') }}" class="nav-link {{ $page_title == "Tambah Masyarakat" ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Tambah Masyarakat</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         @endif
         <li class="nav-item menu-open">
           <a href="#" class="nav-link {{ $title == "Kategori" ? 'active' : '' }}">
@@ -173,15 +196,6 @@
               </a>
             </li>
           </ul>
-        </li>
-        <li class="nav-item">
-          <a href="pages/widgets.html" class="nav-link ">
-            <i class="nav-icon fas fa-envelope"></i>
-            <p>
-              Pesan
-              <span class="right badge badge-danger">New</span>
-            </p>
-          </a>
         </li>
         <li class="nav-item">
           <a href="{{ route('adminLogout') }}" class="nav-link ">

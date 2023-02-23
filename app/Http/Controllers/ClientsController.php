@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aucation;
+use App\Models\AucationHistory;
 use App\Models\Item;
+use App\Models\ItemCategory;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
@@ -18,7 +20,47 @@ class ClientsController extends Controller
         $data['title']  = "Legit";
         $data['page_title'] = "Home";
         $data['aucations']  = Aucation::all();
+        $data['categories'] = ItemCategory::all();
         return view('Clients.Index', $data);
+    }
+
+    public function AucationIndex(Request $request){
+        $data['title'] = "Legit";
+        $data['page_title'] = "Lelang";
+        $data['categories'] = ItemCategory::all();
+        $data['aucation_today'] = Aucation::where('aucation_date', date('Y-m-d'))->get();
+
+        if($request->category && $request->orderBy ){
+            $data['aucations'] = Aucation::join('items', function($item) use ($request){
+                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.category_id', $request->category);
+            })->orderBy('aucation_id', $request->orderBy)->paginate(24)->withQueryString(); 
+            // dd($kon->get());
+        }elseif($request->orderBy){
+            $data['aucations']  = Aucation::orderBy('aucation_id',$request->orderBy)->paginate(24)->withQueryString();
+        }
+        else{
+            $data['aucations']  = Aucation::paginate(24)->withQueryString();
+        }
+
+        return view('Clients.Lelang.BarangLelang', $data);
+    }
+
+    public function aucationHistory(){
+        $data['histories'] = AucationHistory::where('user_id', Auth()->user()->user_id)->orderBy('price_quotaion', "DESC")->get();
+        $data['title']     = "Legit";
+        $data['page_title']= "Riwayat Lelang";
+
+        return view('Clients.Lelang.RiwayatLelang', $data);
+    }
+
+    public function AucationDate(){
+        $data['title'] = "Legit";
+        $data['aucations'] = Aucation::all();
+        $data['page_title'] = "Jadwal Lelang";
+        $data['aucation_dates'] = Aucation::select('aucation_date')->get();
+        
+
+        return view('Clients.Lelang.JadwalLelang', $data);
     }
 
     /**

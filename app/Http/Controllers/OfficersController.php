@@ -146,7 +146,7 @@ class OfficersController extends Controller
             "level_id"     => 2
         ]);
 
-        return redirect()->route('listPegawai')->with('message', "Berhasil mengubah data pegawai");
+        return redirect()->route('listPegawai')->with('success', "Berhasil mengubah data pegawai");
     }
 
     public function updatePassword(Request $request, Officer $officer){

@@ -37,6 +37,11 @@
                                 <div class="">
                                     <a href="{{ route('editMerek', $brand->brand_id) }}" class="btn btn-warning" style="font-weight:bold; width:100px">Ubah</a>
                                 </div>
+                                @if (Auth()->guard('officer')->user()->level_id == 1)
+                                <div class="">
+                                    <a href="{{ route('hapusMerek', $brand->brand_id) }}" class="btn mt-2 btn-danger" style="font-weight:bold; width:100px">Hapus</a>
+                                </div>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

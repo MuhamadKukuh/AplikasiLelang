@@ -26,8 +26,10 @@
                         <tr>
                             <th>No</th>
                             <th>Nama barang</th>
-                            <th>Petugas</th>
-                            <th>Berakhir pada</th>
+                            @if (Auth()->guard('officer')->user()->level_id == 1)
+                                <th>Petugas</th>
+                            @endif
+                            <th>Tanggal lelang di buka</th>
                             <th>Satus</th>
                             <th>Harga dasar</th>
                             <th>Kelipatan bid</th>
@@ -43,21 +45,23 @@
                             <td class="">
                                 {{ $aucation->item->item_name }}
                             </td>
+                            @if (Auth()->guard('officer')->user()->level_id == 1)
                             <td>
-                                Apple
+                                {{ $aucation->officer->officer_name }}
                             </td>
+                            @endif
                             <td>{{ $aucation->aucation_date }}</td>
                             <td>{{ $aucation->status ==  "closed" ? "Tutup" : "Buka" }} |
-                                {{ $aucation->final_price == 0 ? 'Belum ada yang bid brang' : 'Bid terakhir Rp '. number_format($aucation->final_price, 0, '', '. ')  }}
+                                {!! $aucation->final_price == 0 ? 'Belum ada yang bid brang' : 'Bid terakhir <br>  Rp '. number_format($aucation->final_price, 0, '', '. ')  !!}
                             </td>
                             <td>{{ number_format($aucation->initial_price, 0, ' ', '. ') }}</td>
                             <td>{{ number_format($aucation->multiple_bid, 0, '', '. ') }}</td>
-                            <td>{{ $aucation->user_id == null ?'Belum di bid' : $aucation->user->username }}</td>
+                            <td>{{ $aucation->user_id == null ?'Belum di bid' : $aucation->user->name }}</td>
                             <td>
                                 <a href="{{ route('editLelang', $aucation->aucation_id) }}" class="btn btn-warning"
                                     style="font-weight:bold; width:100px">Ubah</a>
                                 <br>
-                                <a href="{{ route('detailLelang', $aucation->aucation_id) }}" class="btn btn-info"
+                                <a href="{{ route('detailLelang', $aucation->aucation_id) }}" class="btn mt-2 btn-primary"
                                     style="font-weight:bold; width:100px">Detail</a>
                             </td>
                         </tr>

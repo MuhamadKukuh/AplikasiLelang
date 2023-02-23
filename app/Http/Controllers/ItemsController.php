@@ -23,13 +23,8 @@ class ItemsController extends Controller
     {
         $data['page_title'] = "List Barang";
         $data['title'] = "Barang";
-        if (Auth()->guard('officer')->user()->level_id == 1) {
-            $data['items'] = Item::all();
-            # code...
-        }else{
-            $data['items'] = Item::where('officer_id', Auth()->guard('officer')->user()->officer_id)->get();
-        }
-
+        $data['items'] = Item::all();
+        
         return view('Admin.DataTables.DataBarang', $data);
     }
 

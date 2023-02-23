@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\ItemDetail;
 use Illuminate\Http\Request;
 
 class BrandsController extends Controller
@@ -108,8 +109,16 @@ class BrandsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Brand $brand)
     {
-        //
+        $getItem = ItemDetail::where('brand_id', $brand->brand_id)->get();
+
+        if($getItem->count() > 0){
+            // dd("Dasda");
+            return back()->with('error', "Merek digunakan oleh beberapa barang");
+        }
+
+        $brand->delete();
+        return back()->with('success', "Berhasil menghapus data merek");
     }
 }

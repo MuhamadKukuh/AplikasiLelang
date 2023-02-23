@@ -48,12 +48,14 @@
                             <td><a href="{{ route('profilPegawai', $item->officer_id) }}">{{ $item->officer->officer_name }}</a></td>
                             @endif
                             <td>
+                                @if (Auth()->guard('officer')->user()->level_id == 1 || $item->officer_id == Auth()->guard('officer')->user()->officer_id)
                                 <a href="{{ route('hapusBarang', $item->item_id) }}" class="btn btn-danger" style="font-weight:bold; width:100px">Hapus</a>
                                 <br>
                                 <br>
                                 <a href="{{ route('editBarang', $item->item_id) }}" class="btn btn-warning" style="font-weight:bold; width:100px">Ubah</a>
                                 <br>
                                 <br>
+                                @endif
                                 <a href="{{ route('detailBarang', $item->item_id) }}" class="btn btn-primary" style="font-weight:bold; width:100px">Detail</a>
                             </td>
                         </tr>

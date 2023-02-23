@@ -32,7 +32,7 @@
                     <tbody>
                         @foreach ($officers as $officer)
                         <tr>
-                            <td>1</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $officer->officer_name }}</td>
                             <td>
                                 {{ $officer->username }}

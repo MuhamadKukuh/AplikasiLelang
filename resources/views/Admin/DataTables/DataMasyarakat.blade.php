@@ -14,8 +14,8 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
-                    <a href="{{ route('tambahKategori') }}" class="btn btn-primary"><span style="font-weight: bold; font-size:18px">+</span> Tambah data
-                        kategori</a>
+                    <a href="{{ route('tambahMasyarakat') }}" class="btn btn-primary"><span style="font-weight: bold; font-size:18px">+</span> Tambah data
+                        masyarakat</a>
                 </h3>
             </div>
             <!-- /.card-header -->
@@ -24,34 +24,30 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Kategori</th>
+                            <th>Nama masyarakat</th>
+                            <th>Email</th>
+                            <th>Nomor HP</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categories as $category)
+                        @foreach ($users as $user)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $category->category }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>
+                                {{ $user->email }}
+                            </td>
+                            <td>{{ $user->phone_number }}</td>
                             <td>
                                 <div class="">
-                                    <a href="{{ route('editKategori', $category->category_id) }}" class="btn btn-warning" style="font-weight:bold; width:100px">Ubah</a>
+                                    <a href="{{ route('hapusMasyarakat', $user->user_id) }}" class="btn btn-danger" style="font-weight:bold; width:100px">Hapus</a>
+                                    <a href="{{ route('editMasyarakat', $user->user_id) }}" class="btn btn-warning" style="font-weight:bold; width:100px">Ubah</a>
                                 </div>
-                                @if (Auth()->guard('officer')->user()->level_id == 1)
-                                <div class="">
-                                    <a href="{{ route('hapusKategori', $category->category_id) }}" class="btn mt-2 btn-danger" style="font-weight:bold; width:100px">Hapus</a>
-                                </div>
-                                @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="2">Total pegawai</th>
-                            <th colspan="1">1000 pegawai</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             <!-- /.card-body -->

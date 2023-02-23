@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use App\Models\ItemDetail;
 use App\Models\ItemCategory;
 use Illuminate\Http\Request;
 
@@ -108,8 +110,15 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ItemCategory $category)
     {
-        //
+        $getItem = Item::where('category_id', $category->category_id)->get();
+
+        if($getItem->count() > 0){
+            return back()->with('error', "Kategori digunakan oleh beberapa barang");
+        }
+
+        $category->delete();
+        return back()->with('success', "Berhasil menghapus data kategori");
     }
 }
