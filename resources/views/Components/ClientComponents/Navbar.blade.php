@@ -18,7 +18,7 @@
                 <li class="dropdown"><a href="#"><span><img src="{{ asset('dist/img/avatar.png') }}" class="rounded-circle"
                     style="max-width: 50px; max-height:50px" alt=""></span></a>
                     <ul>
-                        <li><a href="#">Profile</a></li>
+                        <li><a href="{{ route('profileClients', Auth()->user()->user_id) }}">Profile</a></li>
                         <li><a href="{{ route('userLogout') }}">Logout</a></li>
                     </ul>
                 </li>

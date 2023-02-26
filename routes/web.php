@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AucationHistoryController;
 use App\Http\Controllers\AucationsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BidController;
@@ -44,6 +45,7 @@ Route::group(['middleware' => 'auth:web'], function(){
     Route::get('/user-logout', [AuthController::class, 'userLogout'])->name('userLogout');
     Route::post('/set-bid/{aucation:aucation_id}', [BidController::class, 'setBid'])->name('setBid');
     Route::get('/riwayat-lelang', [ClientsController::class, 'aucationHistory'])->name('historyLelang');
+    Route::get('/profil/{user:user_id}', [ClientsController::class, 'ClientsProfile'])->name('profileClients');
 });
 
 Route::group(['middleware' => 'auth:officer'],function(){
@@ -112,6 +114,12 @@ Route::group(['middleware' => 'auth:officer'],function(){
             Route::get('riwayat-lelang', [AucationsController::class, 'lelangIndex'])->name('riwayatLelang');
             Route::post('ubah-lelang/{aucation:aucation_id}', [AucationsController::class, 'update'])->name('ubahLelang');
         });
+
+        Route::prefix('Riwayat-Lelang')->group(function(){
+            Route::get('list-riwayat-lelang', [AucationHistoryController::class, 'index'])->name('listRiwayatLelang');
+            Route::get('detail-riwayat-lelang/{user:user_id}', [AucationHistoryController::class, 'show'])->name('detailRiwayatLelang');
+        });
+
 
 
     });

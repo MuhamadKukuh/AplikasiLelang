@@ -42,10 +42,17 @@ class AuthController extends Controller
 
     public function loginUser(Request $request){
         // dd($request->all());
+        $mes = [
+            "email.required" => "Email harus di isi",
+            "email.email"    => "Email harus berisi email",
+            "email.unique"   => "Email sudah digunakan",
+            "password.required" => "Kata sandi harus di isi"
+        ];
+
         $val = $request->validate([
             'email' => "required|email",
             'password' => "required"
-        ]);
+        ], $mes);
         
         if (Auth::attempt($val)) {
             $request->session()->regenerate();
@@ -77,7 +84,7 @@ class AuthController extends Controller
             "password.required"       => "Password harus di isi",
             "password.confirmed" => "Password tidak sama dengan konfirmasi password",
             "name.required" => "Nama harus di isi",
-            "phone_number.requried" => "Nomor HP harus di isi",
+            "phone_number.required" => "Nomor HP harus di isi",
             "phone_number.max" => "Maksimal nomor HP 14 angka",
             "phone_number.min" => "Minimal nomor HP 12 angka",
             "phone_number.unique" => "Nomor HP sudah digunakan",

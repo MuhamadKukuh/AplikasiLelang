@@ -29,18 +29,21 @@
                                 <form action="{{ route('loginUser') }}" method="post">
                                     @csrf
                                     <div class="form-group mb-3">
-                                        <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Email atau nomor HP</label>
-                                        <input type="email" name="email" class="form-control border-success">
+                                        <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Email</label>
+                                        <input type="email" name="email" class="form-control  @error('email') is-invalid @else border-success @enderror" value="{{ old('email') }}">
+                                        @error('email')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Kata sandi</label>
-                                        <input type="password" name="password" class="form-control border-success">
+                                        <input type="password" id="trigger-button" name="password" class="form-control border-success">
                                     </div>
                                     <div class="form-group mb-5">
                                         <div class="d-flex justify-content-end">
                                             <a href="" style="font-size:13px" class="mb-2">Lupa kata sandi?</a>
                                         </div>
-                                        <button class="btn btn-outline-success w-100 py-2 fw-bold">Masuk</button>
+                                        <button id="myButton" class="btn btn-success disabled w-100 py-2 fw-bold">Masuk</button>
                                     </div>
                                     
                                 </form>
@@ -53,7 +56,18 @@
     </div>
     @include('Layouts.ClientLayouts.JavaScript')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+    <script>
+        $(document).ready(function () {
+            $('#trigger-button').keyup(function () {
+                $('#myButton').removeClass('disabled');
+            })
+        })
+    </script>
+    @if (Session::has('error'))
+    <script>
+        toastr.error("{{ session('error') }}")
+    </script>
+    @endif
     @if (Session::has('success'))
     <script>
         toastr.success("{{ session('success') }}")

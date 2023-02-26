@@ -2,34 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
-use App\Models\Aucation;
-use App\Models\AucationHistory;
-use App\Models\Officer;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class AucationHistoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['page_title'] = "Dashboard";
-        $data['title'] = "Dashboard";
-        $data['latest_items'] = Item::whereDate('created_at', date('Y-m-d'))->limit(10)->get();
-        $data['latest_aucations'] = Aucation::whereDate('aucation_date', date('Y-m-d'))->limit(10)->get();
-        $data['items_total'] = Item::get()->count(); 
-        $data['aucationsHistory_total'] = AucationHistory::get()->count(); 
-        $data['officers_total'] = Officer::where('level_id', 2)->get()->count(); 
-        $data['users_total'] = User::get()->count(); 
-        $data['latest_users'] = User::whereDate('created_at', date('Y-m-d'))->limit(9)->get();
+        $data['title'] = 'Lelang';
+        $data['page_title'] = 'Riwayat Lelang';
+        if($request->has('search')){
+            // dd($request->search);
+            $data['users'] = User::where('name', 'LIKE', '%'.$request->search.'%')->orderBy('user_id', "DESC")->paginate(20)->withQueryString();
+        }else{
+            $data['users']  = User::orderBy('user_id', "DESC")->paginate(20);
+        }
+        // dd("DSAdsa");
 
-
-        return view('Admin.Index', $data);
+        return view('Admin.RiwayatLelangUser', $data);
     }
 
     /**
@@ -50,7 +45,7 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -59,9 +54,13 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        $data['title'] = "Lelang";
+        $data['page_title'] = "Riwayat lelang ". $user->name;
+        $data['user']   = $user;
+
+        return view('Admin.DetailRiwayat', $data);
     }
 
     /**

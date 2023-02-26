@@ -48,9 +48,10 @@
                                 <label for="exampleInputEmail1" class="fw-normal text-muted">Masukan harga bid</label>
                                 <input type="number" name="bid" value="{{ $aucation->final_price != null ? $aucation->final_price : $aucation->initial_price }}" class="form-control border border-success" id="inputt"
                                     aria-describedby="emailHelp">
+                                <small class="text-danger d-none">Harga bid harus sesuai dengan kelipatan bid</small>
                             </div>
                             <div class="btn btn-sm btn-danger fw-bold" id="closeMod">Reset</div>
-                            <div class="btn btn-sm btn-success fw-bold" id="addVal">50 000</div>
+                            <div class="btn btn-sm btn-success fw-bold" id="addVal">{{ $aucation->multiple_bid }}</div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -87,7 +88,7 @@
                                 <h5 class="mb-0">
                                     <i class="bi bi-cpu-fill"></i>
                                     <span style="color: #414141">
-                                        QUALCOM SNAPDRAGON 860
+                                        {{ $aucation->item->itemDetail->chipset }}
                                     </span>
                                 </h5>
                             </div>
@@ -97,7 +98,7 @@
                                     <h5 class="mb-0">
                                         <i class="bi bi-memory"></i>
                                         <span style="color: #414141">
-                                            6/128GB
+                                            {{ $aucation->item->itemDetail->storage }}
                                         </span>
                                     </h5>
                                 </div>
@@ -106,7 +107,7 @@
                                 <div class="">
                                     <small style="color: #757575">Kualitas Layar</small>
                                     <h5 class="mb-0">
-                                        <i class="bi bi-phone"></i>
+                                        <i class="bi bi-{{ $aucation->item->category->category == "Smartphone" ? "phone" : "display" }}"></i>
                                         <span style="color: #414141">
                                             FHD+ IPS Panel
                                         </span>
@@ -127,7 +128,7 @@
                                 <h5 class="mb-0">
                                     <i class="bi bi-battery-full"></i>
                                     <span style="color: #414141">
-                                        5000mAh
+                                        {{ $aucation->item->category->category == 'Laptop' ?  $aucation->item->itemDetail->battery . 'Wh' : $aucation->item->itemDetail->battery .  "mAh" }}
                                     </span>
                                 </h5>
                             </div>
@@ -151,7 +152,7 @@
                                 sedikit</a>
                         </div>
                     </div>
-                    <hr>
+                    
             </div>
             <div class="col-12 col-sm-3">
                 <div class="card position-relative shadow border border-white">
@@ -195,6 +196,53 @@
                     </div>
                 </div>
             </div>
+            <hr>
+            <div class="col-12 col-sm-9">
+                <div class="container">
+                    <h2 class="">BID tertinggi</h2>
+                    @forelse ($aucation_histories as $history)
+                        <div class="card">
+                            <div class="card-body py-2">
+                                <div class="d-flex justify-content-between">
+                                    <h3>Oleh <a href="" class="text-success" style="font-weight:">{{ $history->user->name }}</a></h3>
+                                        <small style="font-size:14px">{{ $history->created_at->diffForHumans() }}</small>
+                                    
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mt-2">Jumlah bid </h6>
+                                    <h4>
+                                        Rp {{ number_format($history->price_quotaion, 0, '', '. ') }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <h6 class="text-center">Hallo</h6>
+                    @endforelse
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-2">
+                <h2 class="py-2">Barang lelang lainya <a href="{{ route('barangLelang') }}" class="text-success" style="font-size:13px; font-weight:650">Lihat semua</a></h3>
+                @forelse ($another_aucations as $another_aucation)
+                <div class="col-6 col-sm-3 py-3">
+                    <div class="card rounded-4 border-white shadow">
+                        <a href="{{ asset($another_aucation->item->item_main_image) }}"
+                            data-gallery="portfolio-gallery-app" class="glightbox">
+                            <img src="{{ asset($another_aucation->item->item_main_image) }}" class="img-fluid" style="max-width: 100%" alt="">
+                        </a>
+                            <div class="card-body">
+                                <h6><a class="text-success" href="{{ route('lelangDetail', $another_aucation->aucation_id) }}">{{ $another_aucation->item->item_name }}</a> | {{ $another_aucation->status == 'closed' ? 'Tutup' : 'Buka' }}</h6>
+                                <h6 class="card-title fw-bold">
+                                    Rp {{ number_format($another_aucation->initial_price, 0, '', '. ') }}
+                                </h6>
+                            </div>
+                    </div>
+                </div>
+                @empty
+                    
+                @endforelse
+            </div>
         </div>
     </div>
 </main>
@@ -213,6 +261,18 @@
 
 <script>
     $(document).ready(function () {
+        let aucationFinal = {{ !$aucation->final_price ? $aucation->inital_price : $aucation->final_price }}
+        $('#addVal').click(function(){
+            aucationFinal += {{ $aucation->multiple_bid }}
+            $('#inputt').val(aucationFinal)
+            // console.log(aucationFinal);
+        })
+
+        $('#closeMod').click(function(){
+            aucationFinal = {{ !$aucation->final_price ? $aucation->inital_price : $aucation->final_price }}
+            $('#inputt').val(aucationFinal)
+        })
+
         $('.product-image-thumb').on('click', function () {
             var $image_element = $(this).find('img')
             $('.product-image').prop('src', $image_element.attr('src'))

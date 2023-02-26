@@ -6,52 +6,41 @@
             <div class="d-flex justify-content-start">
                 <h2>Riwayat Lelang</h2>
             </div>
-            
+
             @forelse ($histories as $history)
-            <div class="col-12 py-3">
+            <div class="col-xl-12 py-3">
                 <div class="card border-white shadow py-2">
                     <div class="card-body">
-                        <div class="justify-content-between d-flex">
-                            <h5 class="fw-bold">Anda melakuakan bid pada barang <a href="{{ route('lelangDetail', $history->aucation->aucation_id) }}">{{ $history->aucation->item->item_name }}</a> </h5>
-                            <h6>Pada tanggal {{ substr($history->created_at, 0, 10) }}</h6>
+                        @if ($history->user_id == $history->aucation->user_id && $history->aucation->status ==
+                        "closed")
+                        <span class="badge bg-success">Menang</span>
+                        @elseif($history->aucation->status == "closed" && $history->user_id !=
+                        $history->aucation->user_id)
+                        <span class="badge bg-danger">Maaf anda kalah lelang</span>
+                        @else
+                        <span class="badge bg-warning">Lelang masih di buka</span>
+                        @endif
+                        
+                        <div class="card-title mt-3">
+                            <div class="justify-content-between d-flex">
+                                <h5  class="fw-bold">
+                                    Anda melakuakan bid pada barang
+                                </h5>
+                                <p class="d-none d-lg-block">Pada tanggal {{ substr($history->created_at, 0, 10) }}</p>
+                            </div>
                         </div>
-                        <div class="py-2">
-                            <table class="table">
-                                <thead>
-                                    <th>
-                                        Nama barang
-                                    </th>
-                                    <th>
-                                        Status lelang
-                                    </th>
-                                    <th>
-                                        Jumlah bid
-                                    </th>
-                                    <th>
-                                        Harga lelang terakhir
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $history->aucation->item->item_name }}</td>
-                                        <td>
-                                            @if ($history->user_id == $history->aucation_id && $history->aucation->status == "closed")
-                                                Menang
-                                            @elseif($history->aucation->status == "closed" && $history->user_id != $history->aucation->user_id)
-                                                Maaf anda kalah lelang
-                                            @else
-                                                Lelang masih di buka
-                                            @endif
-                                        </td>
-                                        <td>
-                                            Rp {{ number_format($history->price_quotaion, 0, "", ". ") }}
-                                        </td>
-                                        <td>
-                                            Rp {{ number_format($history->aucation->final_price, 0, "", ". ") }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="card-subtitle justify-content-between d-flex">
+                            <a href="{{ route('lelangDetail', $history->aucation->aucation_id) }}" class="fw-bold display-6">{{ $history->aucation->item->item_name }}</a>
+                            <p class="d-lg-none">{{ substr($history->created_at, 0, 10) }}</p>
+                        </div>
+                        <div class="py-3">
+                            <label for="" title="Jumlah bid yang anda masukan">Nilai <span class="text-success">lelang</span> saat ini : </label> 
+                            <label for="" class="text-success">Rp {{ number_format($history->aucation->final_price, 0, "", ". ") }}</label>
+                            <div class="justify-content-between d-flex mt-2">
+                                <p>Nilai yang anda tawarkan :</p>
+                                <h1 class="d-none d-lg-block">Rp {{ number_format($history->price_quotaion, 0, "", ". ") }}</h1>
+                                <h6 class="d-lg-none">Rp {{ number_format($history->price_quotaion, 0, "", ". ") }}</h6>
+                            </div>
                         </div>
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-dark">Unduh PDF</button>
@@ -59,9 +48,6 @@
                     </div>
                 </div>
             </div>
-            @if ($history->aucation_id == $history->aucation->aucation_id)
-                @break
-            @endif
             @empty
             <div class="col-12 py-3">
                 <div class="card border-white shadow py-5">

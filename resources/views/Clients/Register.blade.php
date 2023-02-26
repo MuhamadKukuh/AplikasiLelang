@@ -26,21 +26,21 @@
                                     @csrf
                                     <div class="form-group mb-3">
                                         <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Nama</label>
-                                        <input type="text" name="name" class="@error('name') is-invalid @enderror form-control border-success">
+                                        <input type="text" name="name" value="{{ old('name') }}" class="@error('name') is-invalid @enderror form-control border-success">
                                         @error('name')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Nomor HP</label>
-                                        <input type="number" name="phone_number" class="@error('phone_number') is-invalid @enderror form-control border-success">
+                                        <input type="number" value="{{ old('phone_number') }}" name="phone_number" class="@error('phone_number') is-invalid @enderror form-control border-success">
                                         @error('phone_number')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Email</label>
-                                        <input type="email" name="email" class="@error('email') is-invalid @enderror form-control border-success">
+                                        <input type="email" name="email" value="{{ old('email') }}" class="@error('email') is-invalid @enderror form-control border-success">
                                         @error('email')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror

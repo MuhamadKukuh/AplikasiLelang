@@ -73,7 +73,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('riwayatLelang') }}" class="nav-link {{ $page_title == "Riwayat Lelang" ? 'active' : '' }}">
+              <a href="{{ route('listRiwayatLelang') }}" class="nav-link {{ $page_title == "Riwayat Lelang" ? 'active' : '' }}">
                 <i class="fas fa-history nav-icon"></i>
                 <p>Riwayat Lelang</p>
               </a>
