@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                     'description' => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam fugiat ab aliquid nisi error id explicabo! Reiciendis ad, quas praesentium dolorem aut omnis tempora at dolore possimus incidunt laborum eum similique nesciunt quos tenetur, nulla dolor est quibusdam ipsam autem cumque, nemo soluta quasi tempore! Rerum exercitationem eveniet atque aliquid nulla enim. Itaque voluptatum doloribus expedita temporibus architecto. Asperiores magnam, ratione aperiam quasi, voluptatibus quae, accusamus eos non repellendus rerum minus nisi tenetur ea laborum? Itaque rem tenetur beatae eum, quidem odit, at, quis fuga quisquam facere saepe numquam iste distinctio temporibus repellendus nihil quo! Harum, atque repellendus? Odit, dolorem?",
                     "officer_id" => 1,
                     "category_id" => collect([1, 2])->random(1)[0],
-                    "item_main_image" => collect(["imagesAsset/phonePNG.png", "imagesAsset/laptop.jpg"])->random(1)[0]
+                    "item_main_image" => collect(["imagesAsset/phonePNG.png", "imagesAsset/lapotpC.png"])->random(1)[0]
                 ]);
 
                 $createDetails = ItemDetail::create([

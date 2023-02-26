@@ -29,8 +29,8 @@
                                 <form action="{{ route('loginUser') }}" method="post">
                                     @csrf
                                     <div class="form-group mb-3">
-                                        <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Email</label>
-                                        <input type="email" name="email" class="form-control  @error('email') is-invalid @else border-success @enderror" value="{{ old('email') }}">
+                                        <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Email atau Username</label>
+                                        <input type="text" name="email" class="form-control  @error('email') is-invalid @else border-success @enderror" value="{{ old('email') }}">
                                         @error('email')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror

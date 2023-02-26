@@ -44,17 +44,18 @@ class AuthController extends Controller
         // dd($request->all());
         $mes = [
             "email.required" => "Email harus di isi",
-            "email.email"    => "Email harus berisi email",
+            // "email.email"    => "Email harus berisi email",
             "email.unique"   => "Email sudah digunakan",
             "password.required" => "Kata sandi harus di isi"
         ];
 
         $val = $request->validate([
-            'email' => "required|email",
+            'email' => "required",
             'password' => "required"
         ], $mes);
-        
-        if (Auth::attempt($val)) {
+        // dd($request->only('username', 'password'));
+        $username = $request->email;
+        if (Auth::attempt($val) xor Auth::attempt(['username' => $username, "password" =>$request->password])) {
             $request->session()->regenerate();
  
             return redirect()->intended('/');
@@ -84,6 +85,8 @@ class AuthController extends Controller
             "password.required"       => "Password harus di isi",
             "password.confirmed" => "Password tidak sama dengan konfirmasi password",
             "name.required" => "Nama harus di isi",
+            "username.required" => "Username harus di isi",
+            "username.unique" => "Username sudah digunakan",
             "phone_number.required" => "Nomor HP harus di isi",
             "phone_number.max" => "Maksimal nomor HP 14 angka",
             "phone_number.min" => "Minimal nomor HP 12 angka",
@@ -92,6 +95,7 @@ class AuthController extends Controller
 
         $request->validate([
             'email' => "email|required|unique:users",
+            'username' => "required|unique:users",
             'password' => "required|confirmed",
             'phone_number' => "required|unique:users|max:14|min:12",
             'name'  => "required"
@@ -101,6 +105,7 @@ class AuthController extends Controller
             "email" => $request->email,
             "password" => Hash::make($request->password),
             "name"  => $request->name,
+            "username" => $request->username,
             "phone_number" => $request->phone_number
         ]);
 

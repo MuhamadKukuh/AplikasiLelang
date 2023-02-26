@@ -32,6 +32,13 @@
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
+                                        <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Username</label>
+                                        <input type="text" name="username" value="{{ old('username') }}" class="@error('username') is-invalid @enderror form-control border-success">
+                                        @error('username')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-3">
                                         <label class="text-muted" style="font-size: 14px; font-weight:500" for="email">Nomor HP</label>
                                         <input type="number" value="{{ old('phone_number') }}" name="phone_number" class="@error('phone_number') is-invalid @enderror form-control border-success">
                                         @error('phone_number')

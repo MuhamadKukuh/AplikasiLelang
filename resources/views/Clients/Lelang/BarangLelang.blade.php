@@ -44,11 +44,11 @@
                     <form action="" method="GET">
                         <div class="row py-5">
                             @foreach ($categories as $listCategory)
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card border-white shadow">
                                     {{--  --}}
                                     <div class="card-body"
-                                        style="background-image: url({{ $listCategory->category == "Laptop" ? asset('/imagesAsset/lapotpC.png') : asset('imagesAsset/phonePNG.png') }}); background-size: cover; height:100px">
+                                        style="background-image: url({{ $listCategory->category == "Laptop" ? asset('/imagesAsset/lapotpC.png') : asset('imagesAsset/phonePNG.png') }}); background-size: cover; height:200px">
                                         <input class="form-check-input"
                                             {{ isset($_GET['category']) && $_GET['category'] == $listCategory->category_id ? 'checked' : '' }}
                                             type="radio" value="{{ $listCategory->category_id }}" name="category">
@@ -61,8 +61,14 @@
                             @endforeach
                         </div>
                         <div class="row ">
-                            <div class="col-8 mt-2">
-                                <div class="form-group" style="font-size:12px">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="" class="text-muted">Cari barang</label>
+                                    <input type="text" name="search" value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
                                     <label for="" class="text-muted">Urut berdasarkan</label>
                                     <select name="orderBy" class="form-control" id="">
                                         <option value="DESC"
@@ -74,9 +80,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-4 mt-4">
+                            <div class="col-2 mt-4">
                                 <div class="form-group">
-                                    <button class="btn btn-dark form-control">Cari</button>
+                                    <button class="btn btn-dark form-control"><i class="bi bi-search"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +94,7 @@
                             <div class="d-flex justify-content-between">
                                 <h4 class="fw-bold ">Lelang hari ini</h4>
                                 <h4>
-                                    <a class="text-finish fw-bold" style="font-size:14px" href="">Lihat semua</a>
+                                    <a class="text-finish fw-bold" style="font-size:14px" href="{{ route("barangLelang") }}">Lihat semua</a>
                                 </h4>
                             </div>
                             <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry"

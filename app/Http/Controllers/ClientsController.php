@@ -40,10 +40,13 @@ class ClientsController extends Controller
 
         if($request->category && $request->orderBy ){
             $data['aucations'] = Aucation::join('items', function($item) use ($request){
-                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.category_id', $request->category);
+                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.category_id', $request->category)->where('items.item_name', 'LIKE', '%'.$request->search.'%');
             })->orderBy('aucation_id', $request->orderBy)->paginate(24)->withQueryString(); 
+            // dd($data['aucations']);
         }elseif($request->orderBy){
-            $data['aucations']  = Aucation::orderBy('aucation_id',$request->orderBy)->paginate(24)->withQueryString();
+            $data['aucations']  = Aucation::join('items', function($item) use ($request){
+                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.item_name', 'LIKE', '%'.$request->search.'%');
+            })->orderBy('aucation_id',$request->orderBy)->paginate(24)->withQueryString();
         }
         else{
             $data['aucations']  = Aucation::paginate(24)->withQueryString();

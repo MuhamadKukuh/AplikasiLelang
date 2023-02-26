@@ -51,7 +51,7 @@
                                 <small class="text-danger d-none">Harga bid harus sesuai dengan kelipatan bid</small>
                             </div>
                             <div class="btn btn-sm btn-danger fw-bold" id="closeMod">Reset</div>
-                            <div class="btn btn-sm btn-success fw-bold" id="addVal">{{ $aucation->multiple_bid }}</div>
+                            <div class="btn btn-sm btn-success fw-bold" id="addVal">+{{ number_format($aucation->multiple_bid, 0, "", ". ") }}</div>
                         </div>
                     </div>
                     <div class="modal-footer">
