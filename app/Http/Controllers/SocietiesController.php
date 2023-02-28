@@ -50,7 +50,9 @@ class SocietiesController extends Controller
             "password.required"       => "Password harus di isi",
             "password.confirmed" => "Password tidak sama dengan konfirmasi password",
             "name.required" => "Nama harus di isi",
-            "phone_number.requried" => "Nomor HP harus di isi",
+            "username.required" => "Username harus di isi",
+            "username.unique" => "Username sudah digunakan",
+            "phone_number.required" => "Nomor HP harus di isi",
             "phone_number.max" => "Maksimal nomor HP 14 angka",
             "phone_number.min" => "Minimal nomor HP 12 angka",
             "phone_number.unique" => "Nomor HP sudah digunakan",
@@ -58,6 +60,7 @@ class SocietiesController extends Controller
 
         $request->validate([
             'email' => "email|required|unique:users",
+            'username' => "required|unique:users",
             'password' => "required|confirmed",
             'phone_number' => "required|unique:users|max:14|min:12",
             'name'  => "required"
@@ -67,6 +70,7 @@ class SocietiesController extends Controller
             "email" => $request->email,
             "password" => Hash::make($request->password),
             "name"  => $request->name,
+            "username" => $request->username,
             "phone_number" => $request->phone_number
         ]);
 

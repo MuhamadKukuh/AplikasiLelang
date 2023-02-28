@@ -18,9 +18,9 @@ class AucationsController extends Controller
     public function index()
     {
         if(Auth()->guard('officer')->user()->level_id == 1){
-            $data['aucations'] = Aucation::all();
+            $data['aucations'] = Aucation::orderBy('aucation_id', 'DESC')->get();
         }else{
-            $data['aucations'] = Aucation::where('officer_id', Auth()->guard('officer')->user()->officer_id)->get();
+            $data['aucations'] = Aucation::where('officer_id', Auth()->guard('officer')->user()->officer_id)->orderBy('item_id', 'DESC')->get();
         }
         $data['title']     = "Lelang";
         $data['page_title']= 'List Lelang';

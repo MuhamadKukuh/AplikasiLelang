@@ -9,7 +9,7 @@
                 <li><a href="{{ route('home') }}" class="{{ $page_title == "Home" ? "active" : '' }}">Home</a></li>
                 <li class="dropdown"><a href="{{ route('barangLelang') }}" class="{{ $page_title == "Lelang" ? "active" : '' }}">Lelang</span></a>
                     <ul>
-                        <li><a href="#">Jadwal Lelang</a></li>
+                        {{-- <li><a href="#">Jadwal Lelang</a></li> --}}
                         <li><a href="{{ route('barangLelang') }}">Barang Lelang</a></li>
                     </ul>
                 </li>

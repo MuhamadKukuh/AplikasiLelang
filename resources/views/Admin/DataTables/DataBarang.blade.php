@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
 @endpush
 <div class="row">
     <div class="col-12">
@@ -14,7 +15,8 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
-                    <a href="{{ route('tambahBarang') }}" class="btn btn-primary"><span style="font-weight: bold; font-size:18px">+</span> Tambah data
+                    <a href="{{ route('tambahBarang') }}" class="btn btn-primary"><span
+                            style="font-weight: bold; font-size:18px">+</span> Tambah data
                         barang</a>
                 </h3>
             </div>
@@ -31,32 +33,39 @@
                             @if (Auth()->guard()->user()->level_id == 1)
                             <th>Dibuat oleh</th>
                             @endif
-                            <th>Aksi    </th>
+                            <th>Aksi </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($items as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td class="text-center"><img src="{{ asset($item->item_main_image) }}" style="max-width: 300px; max-height:300px" alt=""></td>
+                            <td class="text-center"><img src="{{ asset($item->item_main_image) }}"
+                                    style="max-width: 300px; max-height:300px" alt=""></td>
                             <td>
                                 {{ $item->item_name }}
                             </td>
-                            <td >{!! substr($item->description, 0, 100) !!}...</td>
+                            <td>{!! substr($item->description, 0, 100) !!}...</td>
                             <td>{{ $item->category->category }}</td>
                             @if (Auth()->guard('officer')->user()->level_id == 1)
-                            <td><a href="{{ route('profilPegawai', $item->officer_id) }}">{{ $item->officer->officer_name }}</a></td>
+                            <td><a
+                                    href="{{ route('profilPegawai', $item->officer_id) }}">{{ $item->officer->officer_name }}</a>
+                            </td>
                             @endif
                             <td>
-                                @if (Auth()->guard('officer')->user()->level_id == 1 || $item->officer_id == Auth()->guard('officer')->user()->officer_id)
-                                <a href="{{ route('hapusBarang', $item->item_id) }}" class="btn btn-danger" style="font-weight:bold; width:100px">Hapus</a>
+                                @if (Auth()->guard('officer')->user()->level_id == 1 || $item->officer_id ==
+                                Auth()->guard('officer')->user()->officer_id)
+                                <a href="javascript:void(0)" data-id="{{ $item->item_id }}" class="btn btn-danger swalTrigger"
+                                    style="font-weight:bold; width:100px">Hapus</a>
                                 <br>
                                 <br>
-                                <a href="{{ route('editBarang', $item->item_id) }}" class="btn btn-warning" style="font-weight:bold; width:100px">Ubah</a>
+                                <a href="{{ route('editBarang', $item->item_id) }}"  class="btn btn-warning"
+                                    style="font-weight:bold; width:100px">Ubah</a>
                                 <br>
                                 <br>
                                 @endif
-                                <a href="{{ route('detailBarang', $item->item_id) }}" class="btn btn-primary" style="font-weight:bold; width:100px">Detail</a>
+                                <a href="{{ route('detailBarang', $item->item_id) }}" class="btn btn-primary"
+                                    style="font-weight:bold; width:100px">Detail</a>
                             </td>
                         </tr>
                         @endforeach
@@ -83,14 +92,56 @@
 <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <!-- page script -->
 @if (Session::has('success'))
-    <script>toastr.success('{{ session('success') }}')</script>
+<script>
+    toastr.success('{{ session('success') }}')
+</script>
 @endif
 @if (Session::has('error'))
-    <script>toastr.error('{{ session('error') }}')</script>
+<script>
+    toastr.error('{{ session('error') }}')
+</script>
 @endif
 
 <script>
     $(function () {
+        $('.swalTrigger').click(function () {
+            const id = $(this).attr('data-id')
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah kamu yakin?',
+                text: "Barang yang di hapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya!',
+                cancelButtonText: 'Tidak!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Terhapus!',
+                        'Barang berhasil terhapus.',
+                        'success'
+                    )
+                    setTimeout(function() {
+                        window.location = "hapus-barang/" + id 
+                    }, 500);
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Batal',
+                        'Tidak jadi menghapus data barang',
+                        'error'
+                    )
+                }
+            })
+        });
         $("#example1").DataTable({
             "responsive": true,
             "lengthChange": false,

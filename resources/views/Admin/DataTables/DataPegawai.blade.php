@@ -39,7 +39,7 @@
                             </td>
                             <td>
                                 <div class="">
-                                    <a href="{{ route('hapusPegawai', $officer->officer_id) }}" class="btn btn-danger" style="font-weight:bold; width:100px">Hapus</a>
+                                    <a href="javascript:void(0)" class="swalTrigger btn btn-danger" data-id="{{ $officer->officer_id }}" style="font-weight:bold; width:100px">Hapus</a>
                                     <a href="{{ route('editPegawai', $officer->officer_id) }}" class="btn btn-warning" style="font-weight:bold; width:100px">Ubah</a>
                                     <a href="{{ route('profilPegawai', $officer->officer_id) }}" class="btn btn-primary" style="font-weight:bold; width:100px">Detail</a>
                                 </div>
@@ -82,6 +82,44 @@
 <!-- page script -->
 <script>
     $(function () {
+        $('.swalTrigger').click(function () {
+            const id = $(this).attr('data-id')
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah kamu yakin?',
+                text: "Barang yang di hapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Terhapus!',
+                        'Barang berhasil terhapus.',
+                        'success'
+                    )
+                    setTimeout(function() {
+                    }, 500);
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Batal',
+                        'Tidak jadi menghapus data barang',
+                        'error'
+                    )
+                }
+            })
+        });
+
         $("#example1").DataTable({
             "responsive": true,
             "lengthChange": false,

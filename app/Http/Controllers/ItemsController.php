@@ -23,7 +23,7 @@ class ItemsController extends Controller
     {
         $data['page_title'] = "List Barang";
         $data['title'] = "Barang";
-        $data['items'] = Item::all();
+        $data['items'] = Item::orderBy('item_id', 'DESC')->get();
         
         return view('Admin.DataTables.DataBarang', $data);
     }
@@ -299,7 +299,8 @@ class ItemsController extends Controller
     public function destroy(Item $item)
     {
         $parent = Item::find($item->item_id);
-        if(Aucation::where('item_id', $item->item_id)->get()){
+        $cekAu = Aucation::where('item_id', $item->item_id)->first();
+        if($cekAu != null){
             return back()->with('error', 'Barang ini sedang di lelang');
         }
 

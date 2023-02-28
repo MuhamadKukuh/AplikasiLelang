@@ -20,13 +20,17 @@ class DashboardController extends Controller
     {
         $data['page_title'] = "Dashboard";
         $data['title'] = "Dashboard";
-        $data['latest_items'] = Item::whereDate('created_at', date('Y-m-d'))->limit(10)->get();
-        $data['latest_aucations'] = Aucation::whereDate('aucation_date', date('Y-m-d'))->limit(10)->get();
+        $data['latest_items'] = Item::whereDate('created_at', date('Y-m-d'))->orderBy('item_id', 'DESC')->limit(10)->get();
+        if(Auth()->guard('officer')->user()->level_id == 1){
+            $data['latest_aucations'] = Aucation::whereDate('aucation_date', date('Y-m-d'))->orWhere('status', 'opened')->orderBy('aucation_id', 'DESC')->limit(10)->get();
+        }else{
+            $data['latest_aucations'] = Aucation::whereDate('aucation_date', date('Y-m-d'))->orWhere('status', 'opened')->where('officer_id', Auth()->guard('officer')->user()->officer_id)->orderBy('aucation_id', 'DESC')->limit(10)->get();
+        }
         $data['items_total'] = Item::get()->count(); 
         $data['aucationsHistory_total'] = AucationHistory::get()->count(); 
         $data['officers_total'] = Officer::where('level_id', 2)->get()->count(); 
         $data['users_total'] = User::get()->count(); 
-        $data['latest_users'] = User::whereDate('created_at', date('Y-m-d'))->limit(9)->get();
+        $data['latest_users'] = User::whereDate('created_at', date('Y-m-d'))->orderBy('user_id', 'DESC')->limit(9)->get();
 
 
         return view('Admin.Index', $data);

@@ -26,7 +26,7 @@
                     @if (isset($aucation))
                     <div class="col-6">
                         <div class="wrap">
-                            <h6>Tanggal lelang</h6>
+                            <h6>Tanggal lelang di buka</h6>
                             <h4>{{ $aucation->aucation_date }}</h4>
                         </div>
                         <div class="wrap">
@@ -35,15 +35,15 @@
                         </div>
                         <div class="wrap">
                             <h6>Harga dasar</h6>
-                            <h4>{{ number_format($aucation->initial_price, 0, "", ". ") }}</h4>
+                            <h4>Rp {{ number_format($aucation->initial_price, 0, "", ". ") }}</h4>
                         </div>
                         <div class="wrap">
                             <h6>Kelipatan bid</h6>
-                            <h4>{{ number_format($aucation->multiple_bid, 0, "", ". ") }}</h4>
+                            <h4>Rp {{ number_format($aucation->multiple_bid, 0, "", ". ") }}</h4>
                         </div>
                         <div class="wrap">
                             <h6>Harga Akhir</h6>
-                            <h4>{{ $aucation->user_id == null ? "Belum ada yang melakukan bid" : number_format($aucation->final_price, 0, "", ". "). "oleh" . $aucation->user->name  }}</h4>
+                            <h4>{{ $aucation->user_id == null ? "Belum ada yang melakukan bid" : "Rp ".number_format($aucation->final_price, 0, "", ". "). "oleh" . $aucation->user->name  }}</h4>
                         </div>
                         <div class="wrap">
                             <h6>Petugas lelang di buka</h6>
@@ -73,7 +73,7 @@
                         <hr>
                         <div class="wrap">
                             <h6>Batrai</h6>
-                            <h4>{{ $item->itemDetail->battery }} <small>mAh</small> </h4>
+                            <h4>{{ $item->itemDetail->battery }}<small>{{ $item->category->category == 'Laptop' ? 'Wh' : 'mAh' }}</small> </h4>
                         </div>
                         <hr>
                     </div>
@@ -108,8 +108,7 @@
                     @endif
                 </div>
                 @if (isset($aucation))
-
-                    <a href="{{ route('updateStatus', $aucation->aucation_id) }}" class="btn btn-warning my-4">{{ $aucation->status == "closed" ? "Buka " : "Tutup " }} Lelang</a>
+                    <a href="javascript:void(0)" status={{ $aucation->status }} data-id="{{ $aucation->aucation_id }}" class="btn btn-{{ $aucation->status == 'closed' ? 'success' : 'danger' }} swalTrigger my-4">{{ $aucation->status == "closed" ? "Buka " : "Tutup " }} Lelang</a>
                 @endif
                 <h6 class="mt-2">Deskripsi :</h6>
                 <p>
@@ -135,6 +134,45 @@
 
 <script>
     $(document).ready(function () {
+        $('.swalTrigger').click(function () {
+            const id = $(this).attr('data-id')
+            const status = $(this).attr('status')
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success ml-3',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+                title: status == "opened" ? 'Apakah kamu yakin ingin menutup' : 'Apakah kamu yakin ingin membuka' + ' lelang?',
+                html: "<small style='color:white'>Barang yang di hapus tidak bisa dikembalikan!</small>",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya!',
+                cancelButtonText: 'Tidak!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        status == "opened" ? 'Tertutup!' : 'Terbuka!',
+                        status == "opened" ? 'Kamu berhasil menutup lelang' : 'Kamu berhasil membuka lelang',
+                        'success'
+                    )
+                    setTimeout(function() {
+                        window.location = "../update-status/" + id 
+                    }, 500);
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Batal',
+                        status == "opened" ? 'Tidak jadi menutup lelang' : 'Tidak jadi membuka lelang',
+                        'error'
+                    )
+                }
+            })
+        });
         $('.product-image-thumb').on('click', function () {
             var $image_element = $(this).find('img')
             $('.product-image').prop('src', $image_element.attr('src'))

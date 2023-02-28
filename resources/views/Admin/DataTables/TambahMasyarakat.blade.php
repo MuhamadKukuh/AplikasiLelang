@@ -50,6 +50,16 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="exampleInputEmail1">Username <span class="text-danger"> *</span></label>
+                        <input type="text" name="username"
+                            value="{{ old('username') }}"
+                            class="@error('username') is-invalid @enderror form-control" id="exampleInputEmail1"
+                            placeholder="Masukan nama pegawai">
+                        @error('username')
+                        <span class="invalid-feedback error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="exampleInputEmail1">Email <span class="text-danger"> *</span></label>
                         <input type="email" name="email"
                             value="{{ old('email') }}"

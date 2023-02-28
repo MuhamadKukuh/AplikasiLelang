@@ -144,4 +144,10 @@
     </div>
     <!-- /.col -->
 </div>
+@push('parents-js')
+    @if (Session::has('success'))
+        <script>toastr.success("{{ session('success') }}")</script>
+    @endif
+@endpush
+
 @endsection

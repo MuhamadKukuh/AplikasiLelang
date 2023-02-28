@@ -84,8 +84,8 @@ class OfficersController extends Controller
         $data['title']   = "Petugas";
         $data['page_title'] = 'Profil Petugas';
         $data['officer_history'] = [
-            "create_item" => Item::where('officer_id', $officer->officer_id)->get(),
-            "create_aucation" => Aucation::where('officer_id', $officer->officer_id)->get()
+            "create_item" => Item::where('officer_id', $officer->officer_id)->orderBy('item_id', 'DESC')->get(),
+            "create_aucation" => Aucation::where('officer_id', $officer->officer_id)->orderBy('item_id', 'DESC')->get()
         ];
         // dd($data['officer']);
         return view('Admin.Profile', $data);

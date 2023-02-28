@@ -46,6 +46,6 @@ class User extends Authenticatable
     }
 
     public function histories(){
-        return $this->hasMany(AucationHistory::class, 'user_id');
+        return $this->hasMany(AucationHistory::class, 'user_id')->orderBy('history_id', 'DESC');
     }
 }

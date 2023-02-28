@@ -261,7 +261,7 @@
 
 <script>
     $(document).ready(function () {
-        let aucationFinal = {{ !$aucation->final_price ? $aucation->inital_price : $aucation->final_price }}
+        let aucationFinal = {{ !$aucation->final_price ? $aucation->initial_price : $aucation->final_price  }}
         $('#addVal').click(function(){
             aucationFinal += {{ $aucation->multiple_bid }}
             $('#inputt').val(aucationFinal)
@@ -269,7 +269,7 @@
         })
 
         $('#closeMod').click(function(){
-            aucationFinal = {{ !$aucation->final_price ? $aucation->inital_price : $aucation->final_price }}
+            aucationFinal = {{ !$aucation->final_price ? $aucation->initial_price : $aucation->final_price }}
             $('#inputt').val(aucationFinal)
         })
 
