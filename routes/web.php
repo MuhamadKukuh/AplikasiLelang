@@ -25,11 +25,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Global
-Route::get('/', [ClientsController::class, 'index'])->name('home');
+// Route::get('/', [ClientsController::class, 'index'])->name('home');
 Route::get('/detail-barang/{aucation:aucation_id}', [ClientsController::class, 'show'])->name('lelangDetail');
 Route::get('/bid-barang/{item:item_id', [ClientsController::class, 'bidItem'])->name('bidItem');
-Route::get('/barang-lelang', [ClientsController::class, 'AucationIndex'])->name('barangLelang');
+Route::get('/', [ClientsController::class, 'AucationIndex'])->name('home');
 Route::get('/jadwal-lelang', [ClientsController::class, 'AucationDate'])->name('aucationDate');
+Route::get('/events', [ClientsController::class, 'getEvents']);
 
 
 Route::group(['middleware' => 'isAdmin'], function(){
@@ -45,7 +46,8 @@ Route::group(['middleware' => 'auth:web'], function(){
     Route::get('/user-logout', [AuthController::class, 'userLogout'])->name('userLogout');
     Route::post('/set-bid/{aucation:aucation_id}', [BidController::class, 'setBid'])->name('setBid');
     Route::get('/riwayat-lelang', [ClientsController::class, 'aucationHistory'])->name('historyLelang');
-    Route::get('/profil/{user:user_id}', [ClientsController::class, 'ClientsProfile'])->name('profileClients');
+    Route::get('/profile', [ClientsController::class, 'ClientsProfile'])->name('profileClients');
+    Route::post('/change-password/{user:user_id}', [ClientsController::class, 'ChangePassword'])->name('changePassword');
 });
 
 Route::group(['middleware' => 'auth:officer'],function(){

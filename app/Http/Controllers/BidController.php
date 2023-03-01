@@ -18,13 +18,13 @@ class BidController extends Controller
     public function setBid(Request $request, Aucation $aucation){
 
         // dd( $aucation->final_price - $request->bid % $aucation->multiple_bid == 0);
-        // dd($aucation->final_price - $request->bid % $aucation->multiple_bid == 0);
+        // dd(($aucation->final_price xor $aucation->final_price == null) && ($aucation->final_price ? $aucation->final_price - $request->bid : $aucation->initial_price - $request->bid) % $aucation->multiple_bid == 0);
         // dd($aucation->final_price != null && ($aucation->final_price - $request->bid) % $aucation->multiple_bid == 0);
         if($request->bid >= $aucation->initial_price){
             if($request->bid <= $aucation->final_price){
                 return back()->with('error', "Bid tidak boleh sama dengan nilai lelang saat ini");
             }
-            if(($aucation->final_price xor $aucation->final_price == null) && ($aucation->final_price - $request->bid) % $aucation->multiple_bid == 0){
+            if(($aucation->final_price xor $aucation->final_price == null) && ($aucation->final_price ? $aucation->final_price - $request->bid : $aucation->initial_price - $request->bid) % $aucation->multiple_bid == 0){
                 try {
                     DB::transaction(function () use ($request, $aucation){
                         $aucation->update([

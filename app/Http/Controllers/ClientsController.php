@@ -8,6 +8,7 @@ use App\Models\Aucation;
 use App\Models\ItemCategory;
 use Illuminate\Http\Request;
 use App\Models\AucationHistory;
+use Illuminate\Support\Facades\Hash;
 
 class ClientsController extends Controller
 {
@@ -25,10 +26,48 @@ class ClientsController extends Controller
         return view('Clients.Index', $data);
     }
 
-    public function ClientsProfile(User $user){
-        $data['user'] = $user;
+    public function ChangePassword(Request $request, User $user){
+        $cusMes = [
+            "password.required" => "Kata sandi harus di isi",
+            "password.confirmed"=> "Kata sandi tidak sama dengan konfirmasi sandi"
+        ];
+
+        $request->validate([
+            'password' => 'required|confirmed'
+        ], $cusMes);
+
+        try {
+            $user->update([
+                "password" => Hash::make($request->password)
+            ]);
+            return redirect()->route('profileClients')->with('success', 'Berhasil mengubah katasandi');
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+
+    }
+
+    public function getEvents(){
+        $Aucations = Aucation::all();
+        $myEvent = [];
+        foreach ($Aucations as $aucation) {
+            $color = $aucation->status == 'closed' ? 'red' : 'green';
+            $myEvent[] = [
+                'title' => $aucation->item->item_name,
+                'start' => $aucation->aucation_date,
+                'id'    => $aucation->aucation_id,
+                'backgroundColor' => $color,
+                'borderColor' => $color
+            ];
+        }
+
+        return response()->json($myEvent);
+    }
+
+    public function ClientsProfile(){
+        $data['user'] = Auth()->user();
         $data['title']= "Lelang";
-        $data['page_title'] = "Profile ". $user->name;
+        $data['page_title'] = "Profile ". Auth()->user()->name;
         return view('Clients.Profile', $data);
     }
 
@@ -38,19 +77,32 @@ class ClientsController extends Controller
         $data['categories'] = ItemCategory::all();
         $data['aucation_today'] = Aucation::where('aucation_date', date('Y-m-d'))->limit(3)->get();
 
-        if($request->category && $request->orderBy ){
+        if($request->category){
             $data['aucations'] = Aucation::join('items', function($item) use ($request){
                 $item->on('items.item_id', '=', 'aucations.item_id')->where('items.category_id', $request->category)->where('items.item_name', 'LIKE', '%'.$request->search.'%');
-            })->orderBy('aucation_id', $request->orderBy)->paginate(24)->withQueryString(); 
+            })->where('status', $request->status)->orderBy('aucation_id', $request->orderBy)->paginate(24)->withQueryString(); 
             // dd($data['aucations']);
-        }elseif($request->orderBy){
+        }elseif($request->orderBy && $request->status){
             $data['aucations']  = Aucation::join('items', function($item) use ($request){
                 $item->on('items.item_id', '=', 'aucations.item_id')->where('items.item_name', 'LIKE', '%'.$request->search.'%');
-            })->orderBy('aucation_id',$request->orderBy)->paginate(24)->withQueryString();
+            })->where('status', $request->status)->orderBy('aucation_id',$request->orderBy)->paginate(24)->withQueryString();
+        }elseif($request->search){
+            $data['aucations'] = Aucation::join('items', function($item) use ($request){
+                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.item_name', 'LIKE', '%'.$request->search.'%');
+            })->orderBy('aucation_id', 'DESC')->paginate(24)->withQueryString(); 
         }
         else{
-            $data['aucations']  = Aucation::paginate(24)->withQueryString();
+            $data['aucations']  = Aucation::orderBy('aucation_id', 'DESC')->paginate(24)->withQueryString();
         }
+        
+        // if(isset(Auth()->user()->name)){
+        //     // dd(Auth()->user()->user_id);
+        //     $data['wins'] = AucationHistory::join('aucations', function($au) { 
+        //         $au->on('aucations.aucation_id', '=' ,'aucation_histories.aucation_id')->where('aucations.status', 'closed')->where('aucations.user_id', Auth()->user()->user_id);
+        //      })->where('aucation_histories.user_id', Auth()->user()->user_id)->limit(6)->get();
+
+        //     //  dd($winAu);
+        // }
 
         return view('Clients.Lelang.BarangLelang', $data);
     }
@@ -65,9 +117,8 @@ class ClientsController extends Controller
 
     public function AucationDate(){
         $data['title'] = "Legit";
-        $data['aucations'] = Aucation::all();
+        $data['aucations'] = Aucation::whereDate('aucation_date', date("Y-m-d"))->orderBy('aucation_id', 'DESC')->paginate(20);
         $data['page_title'] = "Jadwal Lelang";
-        $data['aucation_dates'] = Aucation::select('aucation_date')->get();
         
 
         return view('Clients.Lelang.JadwalLelang', $data);
@@ -101,16 +152,14 @@ class ClientsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function bidItem(Request $request, Item $item){
-        
-    }
+
 
     public function show(Aucation $aucation)
     {
         $data['title']  = "Legit";
         $data['page_title'] = $aucation->aucation_name . " Detail";
         $data['aucation']  = $aucation;
-        $data['another_aucations'] = Aucation::where('aucation_id', '!=', $aucation->aucation_id)->limit(4)->get();
+        $data['another_aucations'] = Aucation::where('aucation_id', '!=', $aucation->aucation_id)->orderBy('aucation_id', 'DESC')->limit(4)->get();
         $data['aucation_histories'] = AucationHistory::where('aucation_id', $aucation->aucation_id)->orderBy('created_at', 'DESC')->limit(3)->get();
         return view('Clients.DetailItem', $data);
     }

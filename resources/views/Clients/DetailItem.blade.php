@@ -147,8 +147,8 @@
                             <div id="descItem" class="textTrunc">
                                 {!! $aucation->item->description !!}
                             </div>
-                            <a href="javascript:void(0)" id="unTruncate" class="text-primary">Lihat lebih banyak</a>
-                            <a href="javascript:void(0)" id="TruncateText" class="d-none text-primary">Lihat lebih
+                            <a href="javascript:void(0)" id="unTruncate" style="color:rgb(0, 174, 23)">Lihat lebih banyak</a>
+                            <a href="javascript:void(0)" id="TruncateText" class="d-none" style="color:rgb(0, 174, 23)">Lihat lebih
                                 sedikit</a>
                         </div>
                     </div>
@@ -187,11 +187,8 @@
                         <hr>
                         <button class="w-100 btn btn-success {{ isset(Auth()->user()->name) && $aucation->status == 'opened' ? '' : 'disabled'  }} fw-bold rounded-3" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">Bid barang</button>
-                            <div class="mt-2">
-                                <a href="" class="text-black" style="font-weight:650; font-size:12px">
-                                    <i class="bi bi-bookmark mr-1"></i>
-                                    Tandai lelang 
-                                </a>
+                            <div class="py-2">
+                                
                             </div>
                     </div>
                 </div>
@@ -217,13 +214,13 @@
                             </div>
                         </div>
                     @empty
-                        <h6 class="text-center">Hallo</h6>
+                        <h6 class="text-muted">Belum ada yang melakukan bid..</h6>
                     @endforelse
                 </div>
             </div>
             <hr>
             <div class="row mt-2">
-                <h2 class="py-2">Barang lelang lainya <a href="{{ route('barangLelang') }}" class="text-success" style="font-size:13px; font-weight:650">Lihat semua</a></h3>
+                <h2 class="py-2">Barang lelang lainya <a href="{{ route('home') }}" class="text-success" style="font-size:13px; font-weight:650">Lihat semua</a></h3>
                 @forelse ($another_aucations as $another_aucation)
                 <div class="col-6 col-sm-3 py-3">
                     <div class="card rounded-4 border-white shadow">
@@ -232,7 +229,7 @@
                             <img src="{{ asset($another_aucation->item->item_main_image) }}" class="img-fluid" style="max-width: 100%" alt="">
                         </a>
                             <div class="card-body">
-                                <h6><a class="text-success" href="{{ route('lelangDetail', $another_aucation->aucation_id) }}">{{ $another_aucation->item->item_name }}</a> | {{ $another_aucation->status == 'closed' ? 'Tutup' : 'Buka' }}</h6>
+                                <h6><a class="text-success" href="{{ route('lelangDetail', $another_aucation->aucation_id) }}">{{ ucfirst($another_aucation->item->item_name) }}</a> | {{ $another_aucation->status == 'closed' ? 'Tutup' : 'Buka' }}</h6>
                                 <h6 class="card-title fw-bold">
                                     Rp {{ number_format($another_aucation->initial_price, 0, '', '. ') }}
                                 </h6>

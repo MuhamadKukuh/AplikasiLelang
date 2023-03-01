@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="form-group mb-5">
                                         <div class="d-flex justify-content-end">
-                                            <a href="" style="font-size:13px" class="mb-2">Lupa kata sandi?</a>
+                                            <a href="" style="font-size:13px" class="mb-2"></a>
                                         </div>
                                         <button id="myButton" class="btn btn-success disabled w-100 py-2 fw-bold">Masuk</button>
                                     </div>

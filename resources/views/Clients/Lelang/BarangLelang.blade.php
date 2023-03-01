@@ -2,7 +2,18 @@
 @section('ClientContent')
 <section class="aucationHero">
     <div class="container">
-        <div class="row">
+        <div class="row d-block d-sm-none">
+            <form action="" class="form-group">
+                <h4 class="text-center">Cari barang</h4>
+                <div class="d-flex">
+                    <input type="text" name="search" style="border-radius: 15px 0px 0px 15px;
+                   " class="form-control">
+                    <button class="text-white border-0 px-4 rounded-right" style=" border-radius: 0px 15px 15px 0px;
+                    background: rgb(0, 174, 23);;"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+        </div>
+        <div class="row d-sm-block d-none">
             <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-indicators d-flex justify-content-start">
                     @foreach ($categories as $category)
@@ -37,7 +48,7 @@
             </div>
         </div>
 
-        <div class="container mt-5">
+        <div class="container mt-5 d-sm-block d-none">
             <div class="row boreder-white shadow rounded-4">
                 <div class="col-12 col-sm-6 px-4 py-4 ">
                     <h4 class="fw-bold">Cari Lelang</h4>
@@ -63,8 +74,11 @@
                         <div class="row ">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="" class="text-muted">Cari barang</label>
-                                    <input type="text" name="search" value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}" class="form-control">
+                                    <label for="" class="text-muted">Urut berdasarkan</label>
+                                    <select name="status" class="form-control" id="">
+                                        <option value="opened" {{ isset($_GET['status']) && $_GET['status'] == "opened" ? 'selected' : '' }}>Buka</option>
+                                        <option value="closed" {{ isset($_GET['status']) && $_GET['status'] == "closed" ? 'selected' : '' }}>Tutup</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -82,7 +96,7 @@
                             </div>
                             <div class="col-2 mt-4">
                                 <div class="form-group">
-                                    <button class="btn btn-dark form-control"><i class="bi bi-search"></i></button>
+                                    <button class="btn text-white form-control" style="background-color: #f85a40"><i class="bi bi-search"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -94,14 +108,14 @@
                             <div class="d-flex justify-content-between">
                                 <h4 class="fw-bold ">Lelang hari ini</h4>
                                 <h4>
-                                    <a class="text-finish fw-bold" style="font-size:14px" href="{{ route("barangLelang") }}">Lihat semua</a>
+                                    <a class="text-finish fw-bold"  style="font-size:14px; color: rgb(0, 174, 23)" href="{{ route("aucationDate") }}">Lihat semua</a>
                                 </h4>
                             </div>
                             <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry"
                                 data-portfolio-sort="original-order" data-aos="fade-up" data-aos-delay="100">
                                 <div>
                                     <ul class="portfolio-flters d-flex justify-content-start">
-                                        <li data-filter="*" class="filter-active">Semua</li>
+                                        <li data-filter="*" class="filter-active" >Semua</li>
                                         @foreach ($categories as $category)
                                             <li data-filter=".filter-{{ $category->category }}">{{ $category->category }}</li>
                                         @endforeach
@@ -110,15 +124,20 @@
                                 <div class="row gy-4 portfolio-container">
                                     @foreach ($aucation_today as $now)
                 
-                                    <div class="col-xl-4 col-md-6 portfolio-item filter-{{ $now->item->category->category }}">
-                                        <div class="portfolio-wrap">
-                                            <a href="{{ asset($now->item->item_main_image) }}" data-gallery="portfolio-gallery-app"
-                                                class="glightbox"><img src="{{ asset($now->item->item_main_image) }}"
-                                                    class="img-fluid" alt=""></a>
-                                            <div class="portfolio-info">
-                                                <h4><a href="{{ route('lelangDetail', $now->aucation_id) }}"
-                                                        title="More Details">{{ $now->item->item_name }}</a></h4>
-                                                <p>Rp {{ number_format($now->initial_price, 0, " ", ". ") }}</p>
+                                    <div class="col-12 col-sm-4 mb-3 portfolio-item filter-{{ $now->item->category->category }}">
+                                        <div class="card rounded-4 border-white shadow">
+                                            <a href="{{ asset($now->item->item_main_image) }}"
+                                                data-gallery="portfolio-gallery-app" class="glightbox">
+                                                <img src="{{ asset($now->item->item_main_image) }}" class="img-fluid"
+                                                    style="max-width: 100%; max-height:300px" alt="">
+                                            </a>
+                                            <div class="card-body">
+                                                <h6><a
+                                                        href="{{ route('lelangDetail', $now->aucation_id) }}">{{ ucfirst($now->item->item_name) }} </a>
+                                                    | {{ $now->status == 'closed' ? 'Tutup' : 'Buka' }}</h6>
+                                                <h6 class="card-title fw-bold">
+                                                    Rp {{ !$now->final_price ? number_format($now->initial_price, 0, '', '. ') : number_format($now->final_price, 0, '', '. ') }}
+                                                </h6>
                                             </div>
                                         </div>
                                     </div><!-- End Portfolio Item -->
@@ -133,6 +152,51 @@
                 </div>
             </div>
         </div>
+        @if (false)
+        <!--<hr class="my-4">
+         <div class="container">
+            <div class="row py-2">
+                <h4 class="fw-bold">Barang yang dimenangkan</h4>
+            </div>
+            <div class="mt-3">
+                <div class="row">
+                    @foreach ($wins as $win)
+                        <div class="col-6">
+                            <div class="card border-white shadow py-2">
+                                <div class="card-body">
+                                    <span class="badge bg-success">Menang</span>
+                                    <div class="card-title mt-3">
+                                        <div class="justify-content-between d-flex">
+                                            <h5  class="fw-bold">
+                                                Anda melakuakan bid pada barang
+                                            </h5>
+                                            <p class="d-none d-lg-block">Pada tanggal {{ substr($win->created_at, 0, 10) }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="card-subtitle justify-content-between d-flex">
+                                        <a href="{{ route('lelangDetail', $win->aucation->aucation_id) }}" class="fw-bold display-6">{{ $win->aucation->item->item_name }}</a>
+                                        <p class="d-lg-none">{{ substr($win->created_at, 0, 10) }}</p>
+                                    </div>
+                                    <div class="py-3">
+                                        <label for="" title="Jumlah bid yang anda masukan">Nilai <span class="text-success">lelang</span> saat ini : </label> 
+                                        <label for="" class="text-success">Rp {{ number_format($win->aucation->final_price, 0, "", ". ") }}</label>
+                                        <div class="justify-content-between d-flex mt-2">
+                                            <p>Nilai yang anda tawarkan :</p>
+                                            <h1 class="d-none d-lg-block">Rp {{ number_format($win->price_quotaion, 0, "", ". ") }}</h1>
+                                            <h6 class="d-lg-none">Rp {{ number_format($win->price_quotaion, 0, "", ". ") }}</h6>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        {{-- <button class="btn btn-dark">Unduh PDF</button> --}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div> -->
+        @endif
         <hr class="my-4">
         <div class="container">
             <div class="row py-2">
@@ -151,7 +215,7 @@
                                 </a>
                                 <div class="card-body">
                                     <h6><a
-                                            href="{{ route('lelangDetail', $aucation->aucation_id) }}">{{ $aucation->item->item_name }}</a>
+                                            href="{{ route('lelangDetail', $aucation->aucation_id) }}">{{ ucfirst($aucation->item->item_name) }}</a>
                                         | {{ $aucation->status == 'closed' ? 'Tutup' : 'Buka' }}</h6>
                                     <h6 class="card-title fw-bold">
                                         Rp {{ number_format($aucation->initial_price, 0, '', '. ') }}

@@ -19,7 +19,7 @@
 /* Colors */
 :root {
   --color-default: #222222;
-  --color-primary: #008374;
+  --color-primary: rgb(0, 174, 23);
   --color-secondary: #f85a40;
 }
 
@@ -42,7 +42,7 @@ a {
 }
 
 a:hover {
-  color: #00b6a1;
+  color: rgb(0, 132, 18);
   text-decoration: none;
 }
 
@@ -86,7 +86,7 @@ section {
   display: block;
   width: 50px;
   height: 3px;
-  background: var(--color-primary);
+  background: rgb(0, 190, 25);
   left: 0;
   right: 0;
   bottom: 0;
@@ -248,7 +248,7 @@ section {
 # Header
 --------------------------------------------------------------*/
 .topbar {
-  background: #00796b;
+  background: white;
   height: 40px;
   font-size: 14px;
   transition: all 0.5s;
@@ -509,7 +509,7 @@ section {
     inset: 0;
     padding: 50px 0 10px 0;
     margin: 0;
-    background: rgba(0, 131, 116, 0.9);
+    background: white;
     overflow-y: auto;
     transition: 0.3s;
     z-index: 9998;
@@ -555,7 +555,7 @@ section {
   .navbar .getstarted:hover,
   .navbar .getstarted:focus:hover {
     color: #fff;
-    background: rgba(0, 131, 116, 0.8);
+    background: white;
   }
 
   .navbar .dropdown ul,
@@ -565,8 +565,8 @@ section {
     padding: 10px 0;
     margin: 10px 20px;
     transition: all 0.5s ease-in-out;
-    background-color: #007466;
-    border: 1px solid #006459;
+    background-color: white;
+    border: 1px solid white;
   }
 
   .navbar .dropdown>.dropdown-active,
@@ -608,7 +608,7 @@ section {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(0, 106, 93, 0.8);
+    background: rgba(115, 118, 115, 0.8);
     z-index: 9996;
   }
 }
@@ -1163,7 +1163,7 @@ section {
 
 .portfolio .portfolio-flters li:hover,
 .portfolio .portfolio-flters li.filter-active {
-  color: var(--color-primary);
+  color: rgb(0, 174, 23);
 }
 
 .portfolio .portfolio-flters li:first-child {
