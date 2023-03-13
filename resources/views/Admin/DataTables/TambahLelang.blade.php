@@ -28,7 +28,11 @@
                                 <select class="form-control select2" name="item">
                                     <option value="" selected>Pilih barang</option>
                                     @foreach ($items as $item)
-                                        <option value="{{ $item->item_id }}" {{ isset($aucation) && $aucation->item_id == $item->item_id ? 'selected' : '' }}>{{ $item->item_name }}</option>
+                                        <option value="{{ $item->item_id }}" {{ isset($aucation) && $aucation->item_id == $item->item_id ? 'selected' : '' }}>
+                                             <div class="d-flex justify-content-between">
+                                                <p>{{ $item->item_name }}</p>
+                                            </div> 
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('item')

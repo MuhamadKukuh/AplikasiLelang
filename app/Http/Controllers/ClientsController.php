@@ -76,35 +76,24 @@ class ClientsController extends Controller
         $data['page_title'] = "Lelang";
         $data['categories'] = ItemCategory::all();
         $data['aucation_today'] = Aucation::where('aucation_date', date('Y-m-d'))->limit(3)->get();
-
-        if($request->category){
-            $data['aucations'] = Aucation::join('items', function($item) use ($request){
-                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.category_id', $request->category)->where('items.item_name', 'LIKE', '%'.$request->search.'%');
-            })->where('status', $request->status)->orderBy('aucation_id', $request->orderBy)->paginate(24)->withQueryString(); 
-            // dd($data['aucations']);
-        }elseif($request->orderBy && $request->status){
-            $data['aucations']  = Aucation::join('items', function($item) use ($request){
-                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.item_name', 'LIKE', '%'.$request->search.'%');
-            })->where('status', $request->status)->orderBy('aucation_id',$request->orderBy)->paginate(24)->withQueryString();
-        }elseif($request->search){
-            $data['aucations'] = Aucation::join('items', function($item) use ($request){
-                $item->on('items.item_id', '=', 'aucations.item_id')->where('items.item_name', 'LIKE', '%'.$request->search.'%');
-            })->orderBy('aucation_id', 'DESC')->paginate(24)->withQueryString(); 
-        }
-        else{
-            $data['aucations']  = Aucation::orderBy('aucation_id', 'DESC')->paginate(24)->withQueryString();
-        }
-        
-        // if(isset(Auth()->user()->name)){
-        //     // dd(Auth()->user()->user_id);
-        //     $data['wins'] = AucationHistory::join('aucations', function($au) { 
-        //         $au->on('aucations.aucation_id', '=' ,'aucation_histories.aucation_id')->where('aucations.status', 'closed')->where('aucations.user_id', Auth()->user()->user_id);
-        //      })->where('aucation_histories.user_id', Auth()->user()->user_id)->limit(6)->get();
-
-        //     //  dd($winAu);
-        // }
+        $data['aucations'] = Aucation::withCount('histories')->orderBy('aucation_id', 'DESC')->paginate(24);
 
         return view('Clients.Lelang.BarangLelang', $data);
+    }
+
+    public function auctionItems(Request $request){
+        $data['title'] = 'Legit';
+        $data['page_title'] = 'List Lelang';
+        $data['categories'] = ItemCategory::all();
+        $auctions = new Aucation();
+
+        if($request->all()){
+            $data['auctions'] = $auctions->filterScope($request);
+        }else{
+            $data['auctions'] = $auctions->withCount('histories')->orderBy('aucation_id', 'DESC')->paginate(24)->withQueryString();
+        }
+
+        return view('Clients.Lelang.ProductsPage', $data);
     }
 
     public function aucationHistory(){

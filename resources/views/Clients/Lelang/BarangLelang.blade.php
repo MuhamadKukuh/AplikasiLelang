@@ -52,7 +52,7 @@
             <div class="row boreder-white shadow rounded-4">
                 <div class="col-12 col-sm-6 px-4 py-4 ">
                     <h4 class="fw-bold">Cari Lelang</h4>
-                    <form action="" method="GET">
+                    <form action="{{ route('daftarBarangLelang') }}" method="GET">
                         <div class="row py-5">
                             @foreach ($categories as $listCategory)
                             <div class="col-6">
@@ -201,26 +201,37 @@
         <div class="container">
             <div class="row py-2">
                 <div class="d-flex justify-content-start">
-                    <h4 class="fw-bold">Barang Lelang</h4>
+                    <h4 class="fw-bold">Lelang Terbaru</h4>
                 </div>
                 <div class="mt-3">
                     <div class="row">
                         @foreach ($aucations as $aucation)
-                        <div class="col-12 col-sm-3 mb-3">
-                            <div class="card rounded-4 border-white shadow">
+                        <div class="col-12 col-sm-3 mb-3" id="Item" data-sort="{{ $aucation->created_at }}">
+                            <div class="card rounded-4 border-white shadow" >
                                 <a href="{{ asset($aucation->item->item_main_image) }}"
                                     data-gallery="portfolio-gallery-app" class="glightbox">
                                     <img src="{{ asset($aucation->item->item_main_image) }}" class="img-fluid"
                                         style="max-width: 100%; max-height:300px" alt="">
                                 </a>
-                                <div class="card-body">
-                                    <h6><a
-                                            href="{{ route('lelangDetail', $aucation->aucation_id) }}">{{ ucfirst($aucation->item->item_name) }}</a>
-                                        | {{ $aucation->status == 'closed' ? 'Tutup' : 'Buka' }}</h6>
-                                    <h6 class="card-title fw-bold">
-                                        Rp {{ number_format($aucation->initial_price, 0, '', '. ') }}
-                                    </h6>
+                                <div class="text-white w-100 py-1 px-3 fw-bold" style="border-radius: 0px 10px 60px 0px; font-size:12px; background: linear-gradient(to right, rgb(1, 138, 19), rgb(0, 208, 28));">
+                                    {{ $aucation->item->category->category }}
                                 </div>
+                                <a href="{{ route('lelangDetail', $aucation->aucation_id) }}" class="pb-3">
+                                    <div class="mt-2 px-3">
+                                        <h6 class="mb-2" style="color:black">
+                                            {{ ucfirst($aucation->item->item_name) }}
+                                        </h6>
+                                        <h5 class="card-title fw-bold" style="color:black">
+                                            Rp {{ number_format($aucation->initial_price, 0, '', '. ') }}
+                                        </h5>
+                                        <div class="py-1 rounded-2 fw-bold text-white" style="padding-left:8px; padding-right:8px;width:fit-content; {{ $aucation->item->itemDetail->condition == 'new' ? 'background-color:rgb(0, 174, 23)' : 'background-color: #f96f59;' }}; font-size: 12px">
+                                            {{ $aucation->item->itemDetail->condition == 'new' ? 'Baru' : 'Bekas' }}
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-2">
+                                            <div class="text-muted" style="font-size:14px">{{ $aucation->status == "closed" ? 'Tutup' : 'Buka' }} | {{ $aucation->histories_count }}x di BID</div>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                         @endforeach

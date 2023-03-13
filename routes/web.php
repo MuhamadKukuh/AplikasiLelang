@@ -31,7 +31,7 @@ Route::get('/bid-barang/{item:item_id', [ClientsController::class, 'bidItem'])->
 Route::get('/', [ClientsController::class, 'AucationIndex'])->name('home');
 Route::get('/jadwal-lelang', [ClientsController::class, 'AucationDate'])->name('aucationDate');
 Route::get('/events', [ClientsController::class, 'getEvents']);
-
+Route::get('/daftar-barang-lelang', [ClientsController::class, 'auctionItems'])->name('daftarBarangLelang');
 
 Route::group(['middleware' => 'isAdmin'], function(){
     Route::get('/login', [AuthController::class, 'UserIndex'])->name('loginIndex');

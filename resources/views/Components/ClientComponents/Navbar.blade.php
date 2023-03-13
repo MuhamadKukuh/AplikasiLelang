@@ -5,7 +5,7 @@
             <h1 style="color:rgb(0, 174, 23)">Legit<span>.</span></h1>
         </a>
         <div class="col-6 d-none d-sm-block">
-            <form action="/">
+            <form action="/daftar-barang-lelang">
                 <div class="">
                     <input name="search" value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}" type="text" class="form-control rounded-3 border-muted custom-control" placeholder="Cari barang">
                 </div>

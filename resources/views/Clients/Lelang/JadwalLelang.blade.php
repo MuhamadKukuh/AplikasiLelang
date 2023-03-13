@@ -5,8 +5,8 @@
 <!-- Theme style -->
 <link rel="stylesheet" href="/dist/css/adminlte.min.css">
 
-<section class="content">
-    <div class="container ">
+<section class="">
+    <div class="container">
         <div class="row my-5 gy-4 gx-5">
             <div class="col-12 col-sm-4">
                 <div class="py-3 px-3 border-white shadow rounded-3" id="calendar"></div>
